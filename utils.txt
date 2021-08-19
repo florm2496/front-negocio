@@ -1,0 +1,5 @@
+INSTALACIONES:
+
+npm install --save axios vue-axios
+
+npm install vuejs-datatable
