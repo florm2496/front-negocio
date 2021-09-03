@@ -1,10 +1,12 @@
 <template>
     <div class="sidebar">
-        <div class="title">
-          Bienvenido {{this.usuario}}
-        </div>
-    
+
         <div class="menu-items">
+                 <router-link to="#" active-class="active" tag="button" exact class="side-btn">
+                <div class="link-container">
+                 SISTEMA DE GESTION
+                </div>
+            </router-link>
             <router-link to="/" active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
                   Panel de control
@@ -15,23 +17,30 @@
                    Clientes
                 </div>
             </router-link>
-            <router-link to="/profile" active-class="active" tag="button" exact class="side-btn">
+            <router-link to="/cuentas" active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
-                    Profile
+                    Cuentas
                 </div>
             </router-link>
-            <router-link to="/settings" active-class="active" tag="button" exact class="side-btn">
+              <router-link to="/productos" active-class="active" tag="button" exact class="side-btn">
+                <div class="link-container">
+                    Productos
+                </div>
+            </router-link>
+            <!-- <router-link to="/settings" active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
                     Settings
                 </div>
-            </router-link>
-           
+            </router-link> -->
+               <router-link to='/login' active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
-                    <b-button @click="logout">
+                       <b-button @click="logout">
                         Salir
                     </b-button>
-                 
                 </div>
+            </router-link>
+           
+            
        
         </div>
     </div>

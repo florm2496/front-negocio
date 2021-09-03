@@ -1,15 +1,14 @@
 <template>
 
   <b-container fluid>
-      <modal-cliente ref="modal"/>
-      <b-button @click="abrirmodal('crear',{})">Nuevo cliente</b-button>
-      <b-button @click="cargar()">recargar</b-button>
+      <modal-cliente  @recargar="cargar()" ref="modal"/>
+      <b-button @click="abrirmodal('crear',{})"><b-icon class="m-10" icon="plus-circle">Nuevo</b-icon>Nuevo</b-button>
     <!-- User Interface controls -->
     <b-row>
   
       <b-col lg="6" class="my-1">
         <b-form-group
-          label="Filter"
+          label=""
           label-for="filter-input"
           label-cols-sm="3"
           label-align-sm="right"
@@ -21,7 +20,7 @@
               id="filter-input"
               v-model="filter"
               type="search"
-              placeholder="Type to Search"
+              placeholder="Escribe lo que quieras buscar"
             ></b-form-input>
 
             <b-input-group-append>
@@ -54,8 +53,8 @@
  
     </b-row>
     <b-table
-      :items="items2"
-      :fields="campos"
+      :items="datos"
+      :fields="fields"
       :current-page="currentPage"
       :per-page="perPage"
       :filter="filter"
@@ -74,11 +73,25 @@
       </template>
 
       <template #cell(actions)="row">
-        <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
-         Editar
+        <!-- <b-button size="sm" @click="deletemodal(row.item, row.index, $event.target)" class="mr-1">
+         Eliminar
+        </b-button> -->
+      <b-button id="eliminar-cliente" size="sm" @click="deleteswal(row.item)" class="action" >
+         <b-icon icon="trash-fill"></b-icon>
         </b-button>
-        <b-button @click="abrirmodal('modificar',row.item)">modificar</b-button>
-   <!-- <modificar-cliente :cliente="sendcliente(row.item)" :modal="row.index"/> -->
+
+        <b-button id="modificar-cliente" size="sm" class="action"  @click="abrirmodal('modificar',getcliente(row.item))"><b-icon icon="tag-fill"></b-icon></b-button>
+        <b-button id="cuentas-cliente" class="action" size="sm" @click="cuentascliente(row.item)" ><b-icon  icon="card-checklist"></b-icon></b-button>
+
+           <b-tooltip target="eliminar-cliente" triggers="hover">
+                Eliminar esta cliente
+              </b-tooltip>
+                 <b-tooltip target="modificar-cliente" triggers="hover">
+                Modificar este cliente
+              </b-tooltip>
+                 <b-tooltip target="cuentas-cliente" triggers="hover">
+                Cuentas de este cliente
+              </b-tooltip>
       </template>
 
   
@@ -94,38 +107,61 @@
         ></b-pagination>
       </b-col>
     <!-- Info modal -->
-    <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-      <pre>{{ infoModal.content }}</pre>
+    <b-modal :id="infoModal.id" ok-only @hide="resetInfoModal">
+      <pre>Seguro quiere eliminar este cliente ?</pre>
     </b-modal>
+
+    <b-modal :id="this.cliente_id" ok-only @hide="resetInfoModal">
+      <pre>Eliminar</pre>
+    </b-modal>
+
+
   </b-container>
 </template>
 
 <script>
-import ModalCliente from './modalcliente.vue'
+
+import APIClientes from '../../apis/clientes'
+import ModalCliente from './modalclientes.vue'
 // import ModificarCliente from './modificar.vue'
   export default {
       name: 'TablaClientes',
-      props:['datos','fields'],
       components: {
         //   ModificarCliente,
           ModalCliente,
       },
     data() {
       return {
-        items2: [],
-        campos : [],
-    
-        data: [],
+      
+        objetocliente:null,
+        datos: [],
+        cliente_id:'0',
         totalRows: 1,
         currentPage: 1,
         perPage: 10,
+     
         pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
         sortBy: '',
         sortDesc: false,
         sortDirection: 'asc',
         filter: null,
         filterOn: [],
+        display:false,
+        consulta:null,
+        resultdelete:'',
+            
         accion:'',
+        fields:[
+          { key: 'apellido', label: 'Apellido', sortable: true, sortDirection: 'desc' },
+          { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-center' },
+          { key: 'boleta_sueldo', label: 'Boleta de sueldo', sortable: true, class: 'text-center' },
+          { key: 'dni', label: 'DNI', sortable: true, class: 'text-center' },
+          { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
+          { key: 'sueldo', label: 'Sueldo', sortable: true, class: 'text-center' },
+          { key: 'telefono', label: 'Telefono', sortable: true, class: 'text-center' },
+          { key: 'actions', label: 'Acciones' }
+
+            ],
         infoModal: {
           id: 'info-modal',
           title: '',
@@ -142,21 +178,78 @@ import ModalCliente from './modalcliente.vue'
             return { text: f.label, value: f.key }
           })
       },
+ 
    
     },
+    
+    created(){
+        this.getclientes()
+    },
     mounted() {
-        this.cargar()
       
-      
-      // Set the initial number of items
-      this.totalRows = this.items2.length
+
+// Set the initial number of items
+      this.totalRows = this.datos.length
     },
     methods: {
-      info(item, index, button) {
+      deletemodal(item, index, button) {
         this.infoModal.title = `Row index: ${index}`
         this.infoModal.content = JSON.stringify(item, null, 2)
         this.$root.$emit('bv::show::modal', this.infoModal.id, button)
       },
+
+      async getclientes(){
+          
+          const consulta=await APIClientes.getClientes();
+          this.datos=consulta
+          this.display=true;
+          },
+
+       cargar(){
+         this.getclientes()
+
+     },
+     cuentascliente(cliente){
+       console.log(cliente)
+       this.$router.push('/cuentascliente')
+     },
+  
+      getcliente(cliente){
+        this.objetocliente=Object.assign({},cliente);
+        return this.objetocliente
+      },
+      async deletecliente(cliente){
+         try{
+           const response=await APIClientes.deletecliente(cliente.id)
+           const texto=cliente.nombre + ' ' + cliente.apellido
+              if (response.status==200) {
+                this.$swal(
+                'BORRADO!',
+                 texto.toUpperCase() + 'HA SIDO BORRADO',
+                'success'
+              )
+              this.cargar()
+            }
+            else if(response.status==204){
+              this.$swal(
+                'BORRADO!',
+                 texto.toUpperCase() + 'HA SIDO BORRADO',
+                'success'
+              )
+              this.cargar()
+              
+            }
+        }
+           catch(error){
+               this.$swal(
+                'ERROR ! MUESTRE ESTA VENTANA AL DESARROLLADOR',
+                 error,
+                'error'
+              )
+        }
+            
+      },
+
       resetInfoModal() {
         this.infoModal.title = ''
         this.infoModal.content = ''
@@ -166,17 +259,34 @@ import ModalCliente from './modalcliente.vue'
         this.totalRows = filteredItems.length
         this.currentPage = 1
       },
-      cargar(){
-        this.items2=this.datos
-        this.campos=this.fields
-     
-      },
+
       abrirmodal(accion,cliente){
           this.$refs.modal.showModal(accion,cliente);
       },
       sendcliente(cliente){
           const datos=cliente
           return datos
+      },
+    
+      confirmswal(titulo,texto){
+        return this.$swal({
+            title: titulo.toUpperCase(),
+            text: texto,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'SI, BORRAR',
+            cancelButtonText:'CANCELAR'
+          })
+      },
+      deleteswal(cliente){
+         const titulo=cliente.nombre + ' ' + cliente.apellido
+         const texto="Seguro quieres borrar a este cliente ?"
+         this.confirmswal(titulo,texto).then((result) => {
+            if (result.isConfirmed) {
+             this.deletecliente(cliente)}
+})
       }
 
     }
@@ -185,4 +295,7 @@ import ModalCliente from './modalcliente.vue'
 
 <style>
     .sr-only {display: none;}
+    .action{
+      margin: 3px;
+    }
 </style>

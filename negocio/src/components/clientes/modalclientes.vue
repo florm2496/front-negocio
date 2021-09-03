@@ -1,12 +1,5 @@
 <template>
   <div>
-      <!-- <b-row align-v="end">
-          <b-col>
- <b-button v-b-modal.modal-prevent-closing>crear cliente</b-button>
-
-          </b-col>
-      </b-row> -->
-   
     <b-modal
       id="modal-prevent-closing"
       ref="modal"
@@ -268,12 +261,13 @@ import APIClientes from '../../apis/clientes'
             if (response.status==201) {
                 this.$swal('En buena hora!','Un nuevo cliente fue agregado','success');
                 this.cerrarModal();
-                this.recargartabla();
+                this.$emit('recargar')
 
             }
         }
         catch(error){
             this.$swal('Error!Muestre esta ventana al desarrollador',error.message,'warning');
+            
         }
       
     },
@@ -283,7 +277,7 @@ import APIClientes from '../../apis/clientes'
               if (response.status==200) {
                 this.$swal('Bien hecho','El cliente fue modificado con exito','success');
                 this.cerrarModal();
-                this.recargartabla();
+                this.$emit('recargar')
 
             }
         }

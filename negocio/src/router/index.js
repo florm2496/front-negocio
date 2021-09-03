@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 import Dashboard from '../views/Dashboard.vue'
 import ViewLogin from '../views/Login.vue'
+import Productos from '../views/ViewProductos.vue'
 
 Vue.use(VueRouter)
 
@@ -16,7 +16,33 @@ const routes = [
      
       {
         path: 'clientes',
-        component: () => import(/* webpackChunkName: "Messages" */ '../views/ViewClientes.vue')
+        component: () => import('../views/ViewClientes.vue')
+      },
+      {
+        path: 'cuentascliente',
+        component: () => import('../components/clientes/cuentascliente.vue'),
+        name:'cuentascliente'
+      },
+    
+      {
+        path: 'cuentas',
+        component: () => import('../views/ViewCuentas.vue'),
+  
+      },
+      {
+        path: 'nuevacuenta',
+        name: 'nuevacuenta',
+        component: () => import('../components/cuentas/nuevacuenta.vue'),
+      },
+      {
+        path: 'productos',
+        component: Productos,
+  
+      },
+      {
+        path: 'modalcuentas',
+        component: () => import('../components/clientes/modaltablaclientes.vue'),
+  
       },
     ]
   },

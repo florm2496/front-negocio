@@ -56,6 +56,25 @@ class APIClientes{
     
 
     }
+    async deletecliente(id){
+        const url2=url + id + '/'
+        const headers= await this.getheaders();
+        return await api.delete(url2,{headers})
+    }
+    async getclientebyid(dni){
+        const headers= await this.getheaders();
+        const params={'dni':dni,}
+ 
+        return await api.get(url,{params} ,{headers})
+         
+    }
+    async getcuentascliente(dni){
+        const headers= await this.getheaders();
+        const params={'dni':dni,}
+ 
+        return await api.get(url,{params} ,{headers})
+         
+    }
 }
 
 export default new APIClientes();
