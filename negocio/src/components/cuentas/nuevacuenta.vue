@@ -42,33 +42,40 @@
                         <b-col cols="2"><b-button style="margin:10px;" to="cuentas"><b-icon icon="arrow-left-circle-fill"></b-icon></b-button></b-col>
                  </b-row>
                    <b-row>
-                        <b-col cols="auto"><label for="">Numero de cuenta</label></b-col>
-                    <b-col cols="auto"><b-form-input v-model="numero_cuenta"></b-form-input></b-col>
+                        <b-col cols="3"  class="mr-auto p-3"><label for="">N°cuenta</label></b-col>
+                    <b-col cols="2"  class="mr-auto p-3"><b-form-input v-model="num_cuenta" disabled></b-form-input></b-col>
+
+                     <b-col cols="2"  class="mr-auto p-3"><label for="">Metodo de p</label></b-col>
+                    <b-col cols="5" class="mr-auto p-3">
+                        <v-select id="metodo_id" v-model="metodo" :options="metodos"></v-select>
+                        </b-col>
                    
                    </b-row>
-<b-row>
+                    <b-row>
     
                     <b-col cols="2"  class="mr-auto p-3"><label for="">Cuotas</label></b-col>
-                    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="cuotas" placeholder="Ingrese la cantidad de cuotas" required></b-form-input></b-col>
+                    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="cuotas" :disabled="total==0" placeholder="Ingrese la cantidad de cuotas" required></b-form-input></b-col>
                
                     <b-col cols="2"  class="mr-auto p-3"><label for="">Importe</label></b-col>
-                    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="importe" disabled></b-form-input></b-col>
-                    <b-col cols="1"  class="mr-auto p-3" ><b-button @click="importecuotas()" ><b-icon icon="calculator"></b-icon></b-button></b-col>
+                    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="importecuotas" disabled></b-form-input></b-col>
+                    <!-- <b-col cols="1"  class="mr-auto p-3" ><b-button @click="importecuotas()" ><b-icon icon="calculator"></b-icon></b-button></b-col> -->
 
-</b-row>
+                </b-row>
                 <b-row>
                     
-                    <b-col cols="1"  class="mr-auto p-3"><label for="">Ini.</label></b-col>
-                    <b-col cols="5" class="mr-auto p-3"><b-form-input v-model="fecha_i" type="date" required></b-form-input></b-col>
+                    <b-col cols="3"  class="mr-auto p-3"><label for="">Anticipio</label></b-col>
+                    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="anticipo"></b-form-input></b-col>
+
+                   
                
-                    <b-col cols="1"  class="mr-auto p-3"><label for="">Venc</label></b-col>
-                    <b-col cols="5" class="mr-auto p-3"><b-form-input v-model="fecha_venc" type="date"></b-form-input></b-col>
+                    <b-col cols="2"  class="mr-auto p-3"><label for="">Venc</label></b-col>
+                    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="fecha_venc" type="date"></b-form-input></b-col>
                 
 
                 </b-row>
                    <b-row>
-                    <b-col cols="2"  class="mr-auto p-3"><label for="">Descuento</label></b-col>
-                    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="descuento"></b-form-input></b-col>
+                    <!-- <b-col cols="2"  class="mr-auto p-3"><label for="">Descuento</label></b-col> -->
+                    <!-- <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="descuento"></b-form-input></b-col> -->
                     <b-col cols="2"  class="mr-auto p-3"><label for="">Total</label></b-col>
                     <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="totaldesc" disabled></b-form-input></b-col>
                    </b-row>
@@ -88,13 +95,17 @@
     </b-row>
     <b-row>
 
-        <b-col cols="auto" class="mr-auto p-3"> <label for="">Detalles de productos</label></b-col>
+        <b-col cols="2"  class="mr-auto p-3"> <label for="">Detalles de productos</label></b-col>
+         <b-col cols="2"   class="mr-auto p-3"> <label for="">Precio</label></b-col>
+         <b-col cols="2"  class="mr-auto p-3"> <label for="">Cantidad</label></b-col>
+        <b-col cols="2"  class="mr-auto p-3"> <label for="">Descuento</label></b-col>
   
   <b-row>
       
-        <b-col cols="3" class="mr-auto mb-auto p-3"><b-form-input v-model="producto.nombre" placeholder="Producto"/></b-col>
-        <b-col cols="3" class="mr-auto p-3"> <b-form-input v-model="producto.precio" placeholder="Precio" disabled/></b-col>
-        <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="cantidad" placeholder="Cantidad"/></b-col>
+        <b-col cols="2" class="mr-auto mb-auto p-3"><b-form-input v-model="producto.nombre" placeholder="Producto"/></b-col>
+        <b-col cols="2" class="mr-auto p-3"> <b-form-input v-model="producto.precio" placeholder="Precio" disabled/></b-col>
+        <b-col cols="2" class="mr-auto p-3"><b-form-input v-model="cantidad" placeholder="Cantidad"/></b-col>
+        <b-col cols="2" class="mr-auto p-3"><b-form-input v-model="descuento" placeholder="Descuento"/></b-col>
         <b-col cols="1" class="mr-auto p-3"><b-button @click="abrirmodalproductos()"><b-icon icon="search"></b-icon></b-button></b-col>
      <b-col cols="1" class="mr-auto p-3"><b-button @click="agregarproducto" :disabled="fileSizeValidation"><b-icon icon="plus"></b-icon></b-button></b-col>
 
@@ -117,7 +128,7 @@
       <template #cell(actions)="row">
     
 
-        <b-button size="sm" @click="eliminar(row.item)"> <b-icon icon="x"></b-icon> </b-button>
+        <b-button size="sm" @click="eliminar(row.item,row.index)"> <b-icon icon="x"></b-icon> </b-button>
 
       </template>
 
@@ -152,33 +163,44 @@ export default {
         return{
             loading:false,
             buscado:'',
-        
+
             cuotas:0,
             importe:0,
             total:0,
+            subtotal:0,
+            metodo:null,
             cliente:[],
             aux_dni_cliente:'',
             aux_cantidad:0,
             cantidad:0,
+            anticipo:0,
             descuento:0,
             venc:'',
-            fecha_i:'',
             garante:'',
             fecha_venc:'',
+            num_cuenta:0,
             disabled_agregar:true,
-            numero_cuenta:'',
+            productos:[],
+            subtotales:[],
+            descuentos:[],
+            cantidades:[],
+
+  
+            metodos:['tarjeta','contado'],
          
             producto:{
                 precio:0,
-                nombre:''
+                nombre:'',
+                codigo:0,
             },
       
             fields: [
+                { key: 'codigo', label: 'Codigo', },
                 { key: 'producto', label: 'Producto', },
                 { key: 'cantidad', label: 'Cantidad'},
                 { key: 'precio', label: 'Precio'},
                 { key: 'subtotal', label: 'Subtotal'},
-                { key: 'actions', label: 'Actions' }
+                { key: 'actions', label: '' }
             ],
             items:[]
 
@@ -189,25 +211,35 @@ export default {
 
     },
     mounted(){
+        this.getnumcuenta()
 
 
     },
       computed: {
-    fileSizeValidation() {
-        var estado = true
-        if (this.cantidad != 0 && this.producto.precio != 0) {
-            estado=false
-        }
-      return (
-        estado
-      );
-    },
+                fileSizeValidation() {
+                    var estado = true
+                    if (this.cantidad != 0 && this.producto.precio != 0) {
+                        estado=false
+                    }
+                return (
+                    estado
+                );
+                },
+                importecuotas(){
+                    var importe=0
+                    if (this.total > 0 && this.cuotas > 0) {
+                        importe=this.total/parseInt(this.cuotas)
+                    }
+                    return (
+                        importe
+                    );
+                    },
 
        totaldesc(){
            var total= this.total
-           if (this.total!=0 && this.descuento!=0){
+           if ((this.descuento >= 0 && this.descuento <= total) && (this.anticipo >= 0 && this.anticipo <= total)){
               
-                total=this.total - this.descuento
+                total=this.total - this.descuento - this.anticipo
            }
             return (
                 total
@@ -242,6 +274,13 @@ export default {
                 this.loading=false
             }
         },
+        async getnumcuenta(){
+            const response=await APICuentas.getNumCuenta()
+            this.num_cuenta=response.num_cuenta
+      
+
+        },
+
       
       abrirmodalclientes(){
           this.$refs.modal.showModal();
@@ -256,15 +295,14 @@ export default {
          this.cliente=cliente
       },
         productoseleccionado: function(producto){
-          console.log(producto.nombre)
          this.producto=producto
       },
 
-      eliminar(product){
+      eliminar(product,fila){
           
-  
         const datos=this.items
     
+        //estas lineas eliminan el producto de la tabla
         for(var i = 0; i < datos.length; i++) {
             if(datos[i].producto == product.producto) {
                 let subtotal=datos[i].subtotal
@@ -274,25 +312,43 @@ export default {
             }
            
         }
+        //eliminar el producto de los arrays que se enviaran en la api
+        this.productos.splice(fila,1)
+        this.descuentos.splice(fila,1)
+        this.subtotales.splice(fila,1)
+        this.cantidades.splice(fila,1)
 
+        console.log(this.productos)
+        console.log(this.cantidades)
 
       },
       reset(){
           this.producto.nombre=''
           this.producto.precio=''
           this.cantidad=''
+          this.descuento=0
       },
-         agregarproducto(){
-          let cant=this.cantidad
-          this.aux_cantidad=cant
-          let prec=this.producto.precio
-          let subt=parseFloat(cant) * parseFloat(prec)
-          const obj={producto:this.producto.nombre ,cantidad:cant , precio:prec , subtotal:subt}
-          this.items.push(obj)
+    agregarproducto(){
+        let cant=this.cantidad
+        let desc=this.descuento
+        this.aux_cantidad=cant
+        let prec=this.producto.precio
+        let subt=(parseFloat(cant) * parseFloat(prec)) - desc
+        this.subtotal=subt
+        const obj={codigo:this.producto.codigo,producto:this.producto.nombre ,cantidad:cant , precio:prec , subtotal:subt}
 
-          this.reset()
-          this.calculartotal()
+        this.productos.push(parseInt(this.producto.codigo))
+        this.subtotales.push(parseFloat(subt))
+        this.descuentos.push(parseFloat(desc))
+        this.cantidades.push(parseInt(cant))
 
+        this.items.push(obj)
+
+        this.reset()
+        this.calculartotal()
+
+        console.log(this.productos)
+        console.log(this.cantidades)
 
       },
       
@@ -303,27 +359,30 @@ export default {
         for(var i = 0; i < datos.length; i++) {
             let subt=total
             total = subt + parseFloat(datos[i].subtotal)
-           
-
       }
       this.total=total
 
       },
-       importecuotas(){
-        this.importe=this.total/parseInt(this.cuotas)
-    },
+       
     vender(){
         var datos={}
-        if (this.cliente.dni != '' && this.garante != '' && this.total != 0) {
-            datos={'dni':this.cliente.dni,
+        if (this.cliente.dni != '' && this.garante != '' && this.total != 0 && this.productos.length > 0) {
+            console.log('******++++',this.productos)
+            datos={'solicitante':this.cliente.dni,
                     'garante':this.garante,
                     'importe':this.total,
-                    'numero_cuenta':this.numero_cuenta,
+                    'anticipo':parseFloat(this.anticipo),
+                    'metodo_pago':this.metodo,
                     'cant_cuotas':this.cuotas,
-                    'importe_cuota':this.importe,
-                    'dia_inicio':this.fecha_i,
+                    'importe_cuota':parseFloat(this.importecuotas),
                     'dia_venc':this.fecha_venc,
+                    'num_cuenta':this.num_cuenta,
+                    'productos':this.productos,
+                    'cantidades':this.cantidades,
+                    'descuentos':this.descuentos,
+                    'subtotales':this.subtotales,
             }
+            console.log(this.cantidades,this.productos)
             this.agregarventa(datos)
             
         }
@@ -339,7 +398,8 @@ export default {
                 }
         
             }catch(error){
-                this.$swal('Algo salio mal',error,'error')
+                console.log('////////////////',error)
+                this.$swal('cddffdfffff',error,'error')
                 
             }
         }

@@ -98,7 +98,7 @@ import APIProductos from '../../apis/productos'
         titulo:'',
         elect:'hola',
     
-        tipos: ['Electrodomesticos','Indumentaria'],
+        tipos: ['ELECTRODOMESTICOS','INDUMENTARIA'],
         nombreState:null,
         precioState:null,
         tipoState:null,
@@ -186,13 +186,13 @@ import APIProductos from '../../apis/productos'
         async crearproducto(){
         const producto={
             'nombre':this.producto.nombre,
-            'precio':this.producto.precio,
+            'precio':parseFloat(this.producto.precio),
             'estado':this.producto.estado,
             'tipo':this.producto.tipo,
-            'codigo':this.producto.codigo
+            'codigo':parseInt(this.producto.codigo)
         }
         try{
-            const response=await APIProductos.addproducto(producto)
+            const response=await APIProductos.agregarProducto(producto)
             if (response.status==201) {
                 this.$swal('En buena hora!','Un nuevo producto fue agregado','success');
                 this.cerrarModal();

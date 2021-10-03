@@ -119,7 +119,12 @@
             required
           >
           </b-form-input>
+         
         </b-form-group>
+         <b-form-group>
+           <label for="tipo_id">Tipo</label>
+              <v-select id="tipo_id" v-model="cliente.tipo" :options="tipos"></v-select>
+          </b-form-group> 
 
       <b-alert variant="warning" :show="alert">Complete todos los campos</b-alert>
       </form>
@@ -143,10 +148,12 @@ import APIClientes from '../../apis/clientes'
           telefono:'',
           sueldo:'',
           boleta_sueldo:'',
+          tipo:'',
 
 
 
         },
+        tipos:['garante','solicitante'],
         titulo:'',
         
         nombreState:null,
@@ -191,6 +198,8 @@ import APIClientes from '../../apis/clientes'
         this.dniState = null
         this.direccionState=null
         this.direccion=''
+
+        this.tipo='',
         this.alert=false
 
       },
@@ -266,6 +275,7 @@ import APIClientes from '../../apis/clientes'
             }
         }
         catch(error){
+          console.log(error)
             this.$swal('Error!Muestre esta ventana al desarrollador',error.message,'warning');
             
         }

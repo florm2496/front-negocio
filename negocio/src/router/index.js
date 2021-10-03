@@ -4,6 +4,8 @@ import Dashboard from '../views/Dashboard.vue'
 import ViewLogin from '../views/Login.vue'
 import Productos from '../views/ViewProductos.vue'
 
+
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -42,6 +44,23 @@ const routes = [
       {
         path: 'modalcuentas',
         component: () => import('../components/clientes/modaltablaclientes.vue'),
+  
+      },
+      {
+        path: 'detallecuenta',
+        component: () => import('../components/cuentas/detallecuentas.vue'),
+  
+      },
+      {
+        path: 'ingresos',
+        component: () => import('../components/ingresos/tabla.vue'),
+  
+      },
+      {
+        path: 'nuevos',
+        name: 'nuevos',
+        component: () => import('../components/ingresos/nuevoingreso.vue'),
+        
   
       },
     ]

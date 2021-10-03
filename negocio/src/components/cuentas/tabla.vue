@@ -90,7 +90,7 @@
               </b-tooltip>
 
 
-        <b-button id="detallecuenta" class="action" size="sm">    <b-icon icon="folder2"></b-icon></b-button>
+        <b-button id="detallecuenta" class="action" size="sm" @click="detallecuenta(row.item)" >    <b-icon icon="folder2"></b-icon></b-button>
          <b-tooltip target="detallecuenta" triggers="hover">
                 Detalle de esta cuenta
               </b-tooltip>
@@ -161,8 +161,8 @@ import APICuentas from '../../apis/cuentas'
         accion:'',
         fields:[
           { key: 'numero_cuenta', label: 'Numero de cuenta', sortable: true, class: 'text-center' },
-          { key: 'cliente_nombre', label: 'Cliente', sortable: true, sortDirection: 'desc' },
-          { key: 'cliente_dni', label: 'DNI cliente', sortable: true, sortDirection: 'desc' },
+          { key: 'solicitante_nombre', label: 'Solicitante', sortable: true, sortDirection: 'desc' },
+          { key: 'solicitante_dni', label: 'DNI solicitante', sortable: true, sortDirection: 'desc' },
           { key: 'garante', label: 'Garante', sortable: true, class: 'text-center' },
           { key: 'importe', label: 'Importe', sortable: true, class: 'text-center' },
           { key: 'fecha', label: 'Fecha', sortable: true, class: 'text-center' },
@@ -187,6 +187,10 @@ import APICuentas from '../../apis/cuentas'
 
         abrirmodal(accion,cuenta){
           this.$refs.modal.showModal(accion,cuenta);
+      },
+      detallecuenta(cuenta){
+        console.log(cuenta.id)
+        this.$router.push({path :'/detallecuenta',query:{num_cuenta:cuenta.numero_cuenta ,id_cuenta:cuenta.id}});
       },
 
 

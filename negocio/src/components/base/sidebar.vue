@@ -27,11 +27,14 @@
                     Productos
                 </div>
             </router-link>
-            <!-- <router-link to="/settings" active-class="active" tag="button" exact class="side-btn">
+
+             
+              <router-link to="/ingresos" active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
-                    Settings
+                    Ingresos
                 </div>
-            </router-link> -->
+            </router-link>
+  
                <router-link to='/login' active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
                        <b-button @click="logout">
@@ -39,6 +42,7 @@
                     </b-button>
                 </div>
             </router-link>
+
            
             
        

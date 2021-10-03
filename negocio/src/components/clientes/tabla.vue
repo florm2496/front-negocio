@@ -154,11 +154,11 @@ import ModalCliente from './modalclientes.vue'
         fields:[
           { key: 'apellido', label: 'Apellido', sortable: true, sortDirection: 'desc' },
           { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-center' },
-          { key: 'boleta_sueldo', label: 'Boleta de sueldo', sortable: true, class: 'text-center' },
+          { key: 'tipo', label: 'Tipo', sortable: true, class: 'text-center' },
           { key: 'dni', label: 'DNI', sortable: true, class: 'text-center' },
-          { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-          { key: 'sueldo', label: 'Sueldo', sortable: true, class: 'text-center' },
-          { key: 'telefono', label: 'Telefono', sortable: true, class: 'text-center' },
+          
+          //{ key: 'sueldo', label: 'Sueldo', sortable: true, class: 'text-center' },
+          //{ key: 'telefono', label: 'Telefono', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Acciones' }
 
             ],
@@ -210,8 +210,8 @@ import ModalCliente from './modalclientes.vue'
 
      },
      cuentascliente(cliente){
-       console.log(cliente)
-       this.$router.push('/cuentascliente')
+       let nombrecompleto= cliente.nombre + ' ' + cliente.apellido
+       this.$router.push({path :'/cuentascliente',query:{dni:cliente.dni,nombre:nombrecompleto}});
      },
   
       getcliente(cliente){

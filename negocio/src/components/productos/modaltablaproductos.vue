@@ -60,7 +60,7 @@
 
       <template #cell(actions)="row">
          
-        <b-button id="editarproducto"  class="action" size="sm" @click="seleccionarproducto(row.item)">    
+        <b-button id="editarproducto" :disabled="row.item.stock == 0" class="action" size="sm" @click="seleccionarproducto(row.item)">    
             <b-icon icon="hand-thumbs-up"></b-icon></b-button>
 
        
@@ -114,8 +114,8 @@ export default {
             
         accion:'',
         fields:[
-          { key: 'nombre', label: 'Nombre', sortable: true, sortDirection: 'desc' },
           { key: 'codigo', label: 'Codigo', sortable: true, class: 'text-center' },
+          { key: 'nombre', label: 'Nombre', sortable: true, sortDirection: 'desc' },
           { key: 'precio', label: 'Precio', sortable: true, class: 'text-center' },
           { key: 'tipo', label: 'Tipo', sortable: true, class: 'text-center' },
 

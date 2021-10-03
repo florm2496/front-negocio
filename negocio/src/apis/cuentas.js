@@ -37,9 +37,28 @@ class APICuentas{
      
         
     }
+    async cuentasbycliente(cliente){
+        let u=url + 'reportescuentas'
+        let params = {'cliente':cliente}
+        const headers= await this.getheaders();
+        
+        const cuentas =await api.get(u,{params},{headers})
+        return cuentas.data;
+
+    }
+    async getNumCuenta(){
+        let u=url + 'numerocuenta'
+        const headers= await this.getheaders();
+        const cuenta =await api.get(u,{headers})
+        return cuenta.data;
+        
+     
+        
+    }
+
     async addcuenta(datos){
         const headers= await this.getheaders();
-        let u=url+ 'nuevacuenta'
+        let u=url+ 'registrarcuenta'
         return await api.post(u,datos,{headers})
        
     }
@@ -56,6 +75,22 @@ class APICuentas{
         const url2=url + id + '/'
         const headers= await this.getheaders();
         return await api.delete(url2,{headers})
+    }
+    async cuotascuenta(numerocuenta){
+        let u=url + 'cuotascuenta'
+        const headers= await this.getheaders();
+        let params = {'num_cuenta':numerocuenta}
+        const cuenta =await api.get(u,{params},{headers})
+        return cuenta.data;
+        
+
+    }
+    async nuevopago(datos){
+        let u=url + 'nuevopago'
+        const headers= await this.getheaders();
+        const nuevopago =await api.post(u,datos,{headers})
+        return nuevopago.data;
+
     }
 }
 
