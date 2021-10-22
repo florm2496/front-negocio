@@ -56,6 +56,18 @@ class APIProductos{
         const headers= await this.getheaders();
         return await api.delete(url2,{headers})
     }
+    async nuevosIngresos(datos){
+        const headers= await this.getheaders();
+        let url2 = url +  'nuevosingresos'
+        return await api.post(url2,datos,{headers})
+       
+    }
+    async getIngresos(){
+        const headers= await this.getheaders();
+        let url2 = url +  'nuevosingresos'
+        let ingresos = await api.get(url2,{headers})
+        return ingresos.data;
+    }
 }
 
 export default new APIProductos();

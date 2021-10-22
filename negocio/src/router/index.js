@@ -57,8 +57,8 @@ const routes = [
   
       },
       {
-        path: 'nuevos',
-        name: 'nuevos',
+        path: 'nuevosingresos',
+        name: 'nuevosingresos',
         component: () => import('../components/ingresos/nuevoingreso.vue'),
         
   

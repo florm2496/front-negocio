@@ -63,13 +63,13 @@
                 </b-row>
                 <b-row>
                     
-                    <b-col cols="3"  class="mr-auto p-3"><label for="">Anticipio</label></b-col>
+                    <b-col cols="2"  class="mr-auto p-3"><label for="">Anticipio</label></b-col>
                     <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="anticipo"></b-form-input></b-col>
 
                    
                
                     <b-col cols="2"  class="mr-auto p-3"><label for="">Venc</label></b-col>
-                    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="fecha_venc" type="date"></b-form-input></b-col>
+                    <b-col cols="5" class="mr-auto p-3"><b-form-input v-model="fecha_venc" type="date"></b-form-input></b-col>
                 
 
                 </b-row>
