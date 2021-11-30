@@ -97,8 +97,33 @@
         <b-row>
           <b-col>
    
+ <b-button id="show-btn" @click="showModal">Refinanciar cuenta </b-button>
+ <b-modal ref="modal-refinanciar" hide-footer title="Refinanciar cuenta">
+      <b-form-group
+     label="Saldo pendiente"
+     >
+         <b-form-input v-model="cuenta.saldo" disabled>
 
+    </b-form-input>
+     </b-form-group>
+     <b-form-group
+     label="Cantidad de cuotas"
+     >
+         <b-form-input v-model="cuotas_refinanciadas" placeholder="Cuotas">
 
+    </b-form-input>
+     </b-form-group>
+       <b-form-group
+     label="Fecha de vencimiento"
+     type="date"
+     >
+         <b-form-input v-model="fecha_refinanciada" >
+
+    </b-form-input>
+     </b-form-group>
+      <b-button class="mt-2" variant="outline-warning" block @click="refinanciar_cuenta()">Refinanciar</b-button>
+    </b-modal>
+  
           </b-col>
           <b-col>
             
@@ -134,7 +159,7 @@
 
            </b-table>
       </b-container>
-
+  
     
     <b-modal ref="my-modal" hide-footer :title="titulo_modal">
       <b-container>
@@ -187,7 +212,7 @@
 
 import APICuentas from '../../apis/cuentas'
 export default {
-    name:'DetalleCuenta',
+    name:'DetallePagos',
     components:{
      
 
@@ -200,8 +225,10 @@ export default {
             //cuotas :[],
             garante : 0,
             solicitante:0,
+            cuotas_refinanciadas:0,
             pagos:null,
             hora:'',
+          
             nuevo_pago: {
                 'monto':0,
                 'metodo':'',
@@ -247,6 +274,9 @@ export default {
     beforeCreate(){
         this.numero_cuenta=this.$route.query.num_cuenta
         this.id_cuenta=this.$route.query.id_cuenta
+
+    },
+    refinanciar_cuenta(){
 
     },
     created(){
@@ -300,6 +330,12 @@ export default {
          
 
         },
+        showModal() {
+        this.$refs['modal-refinanciar'].show()
+      },
+      hideModal() {
+        this.$refs['modal-refinanciar'].hide()
+      },
         async realizarpago(){
           
           let nuevo_pago = {

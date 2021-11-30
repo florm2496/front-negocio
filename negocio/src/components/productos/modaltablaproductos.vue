@@ -59,8 +59,8 @@
       </template>
 
       <template #cell(actions)="row">
-         
-        <b-button id="editarproducto" :disabled="row.item.stock == 0" class="action" size="sm" @click="seleccionarproducto(row.item)">    
+             <b-button id="editarproducto" class="action" size="sm" @click="seleccionarproducto(row.item)">    
+        <!-- <b-button id="editarproducto" :disabled="row.item.stock == 0" class="action" size="sm" @click="seleccionarproducto(row.item)">     -->
             <b-icon icon="hand-thumbs-up"></b-icon></b-button>
 
        

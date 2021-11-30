@@ -61,9 +61,9 @@ class APIClientes{
         const headers= await this.getheaders();
         return await api.delete(url2,{headers})
     }
-    async getclientebyid(dni){
+    async getclientebyid(dni,tipo){
         const headers= await this.getheaders();
-        const params={'dni':dni,}
+        const params={'dni':dni,'tipo':tipo}
  
         return await api.get(url,{params} ,{headers})
          

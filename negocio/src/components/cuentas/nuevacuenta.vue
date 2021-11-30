@@ -17,9 +17,10 @@
             <b-col ><label for="">Datos del cliente</label>
  
         <b-row>
-                <b-col cols="auto" class="mr-auto p-3"><b-button @click="abrirmodalclientes()"><b-icon icon="list"></b-icon></b-button></b-col>
-                <b-col cols="auto"  class="mr-auto p-3" ><b-form-input v-model="buscado" placeholder="Busca un cliente"></b-form-input></b-col>
-                <b-col cols="auto" class="mr-auto p-3"><b-button @click="buscarCliente()"><b-icon icon="search"></b-icon></b-button></b-col>
+            <b-col cols="2" class="mr-auto p-3"><b-button @click="abrirmodalclientes()"><b-icon icon="list"></b-icon></b-button></b-col>
+            <b-col cols="8"  class="mr-auto p-3" ><b-form-input v-model="buscar_solicitante"   placeholder="Busca un solicitante por DNI" ></b-form-input></b-col>
+            <b-col cols="2" class="mr-auto p-3"><b-button @click="buscarCliente(buscar_solicitante,'solicitante')" :disabled="solicitante_disabled"><b-icon icon="search"></b-icon></b-button></b-col>
+           
         </b-row>
         <b-row>
     <b-col cols="4" class="mr-auto p-3"><label for="">Documento</label></b-col>
@@ -27,8 +28,14 @@
        <b-col cols="4" class="mr-auto p-3"><label for="">Nombre</label></b-col>
     <b-col cols="auto" class="mr-auto p-3"><b-form-input v-model="cliente.nombre" disabled/></b-col> 
        <b-col cols="4" class="mr-auto p-3"><label for="">Garante</label></b-col>
-    <b-col cols="auto" class="mr-auto p-3"><b-form-input v-model="garante"/></b-col> 
-
+    <b-col cols="6" class="mr-auto p-3"><b-form-input v-model="buscar_garante" placeholder="Busca un garante por DNI" /></b-col> 
+     <b-col cols="2" class="mr-auto p-3">
+         <b-button @click="buscarCliente(buscar_garante,'garante')" :disabled="garante_disabled" ><b-icon icon="search"></b-icon></b-button>
+         </b-col>
+          <b-col cols="4" class="mr-auto p-3"><label for="">Documento</label></b-col>
+    <b-col cols="auto" class="mr-auto p-3"><b-form-input v-model="garante.dni" disabled/></b-col>
+       <b-col cols="4" class="mr-auto p-3"><label for="">Nombre</label></b-col>
+    <b-col cols="auto" class="mr-auto p-3"><b-form-input v-model="garante.nombre" disabled/></b-col> 
         </b-row>
             </b-col>
 
@@ -42,11 +49,11 @@
                         <b-col cols="2"><b-button style="margin:10px;" to="cuentas"><b-icon icon="arrow-left-circle-fill"></b-icon></b-button></b-col>
                  </b-row>
                    <b-row>
-                        <b-col cols="3"  class="mr-auto p-3"><label for="">N°cuenta</label></b-col>
-                    <b-col cols="2"  class="mr-auto p-3"><b-form-input v-model="num_cuenta" disabled></b-form-input></b-col>
+                    <b-col cols="2"  class="mr-auto p-3"><label for="">N°c</label></b-col>
+                    <b-col cols="3"  class="mr-auto p-3"><b-form-input v-model="num_cuenta" disabled></b-form-input></b-col>
 
-                     <b-col cols="2"  class="mr-auto p-3"><label for="">Metodo de p</label></b-col>
-                    <b-col cols="5" class="mr-auto p-3">
+                     <b-col cols="2"  class="mr-auto p-3"><label for="">Metodo pago</label></b-col>
+                    <b-col cols="4" class="mr-auto p-3">
                         <v-select id="metodo_id" v-model="metodo" :options="metodos"></v-select>
                         </b-col>
                    
@@ -63,7 +70,7 @@
                 </b-row>
                 <b-row>
                     
-                    <b-col cols="2"  class="mr-auto p-3"><label for="">Anticipio</label></b-col>
+                    <b-col cols="2"  class="mr-auto p-3"><label for="">Anticipo</label></b-col>
                     <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="anticipo"></b-form-input></b-col>
 
                    
@@ -162,8 +169,10 @@ export default {
     data(){
         return{
             loading:false,
-            buscado:'',
-
+            buscar_garante:'',
+            buscar_solicitante:'',
+            garante:'',
+            solicitante:null,
             cuotas:0,
             importe:0,
             total:0,
@@ -176,10 +185,10 @@ export default {
             anticipo:0,
             descuento:0,
             venc:'',
-            garante:'',
             fecha_venc:'',
             num_cuenta:0,
-            disabled_agregar:true,
+  
+            disabled_solicitante:false,
             productos:[],
             subtotales:[],
             descuentos:[],
@@ -210,6 +219,7 @@ export default {
         }
 
     },
+ 
     mounted(){
         this.getnumcuenta()
 
@@ -219,6 +229,24 @@ export default {
                 fileSizeValidation() {
                     var estado = true
                     if (this.cantidad != 0 && this.producto.precio != 0) {
+                        estado=false
+                    }
+                return (
+                    estado
+                );
+                },
+                    garante_disabled() {
+                    var estado = true
+                    if (this.buscar_garante != '') {
+                        estado=false
+                    }
+                return (
+                    estado
+                );
+                },
+                    solicitante_disabled() {
+                    var estado = true
+                    if (this.buscar_solicitante != '') {
                         estado=false
                     }
                 return (
@@ -250,19 +278,29 @@ export default {
 
     },
     methods:{
-        async buscarCliente(){
+        async buscarCliente(tipo_cliente,tipo){
             try{
                 this.loading=true
                 
-                const cliente=await APIClientes.getclientebyid(this.buscado)
+
+                const cliente=await APIClientes.getclientebyid(tipo_cliente,tipo)
                 
                 if (cliente.data.length>0){
-                    this.cliente=cliente.data[0]
-                    this.buscado=this.cliente.dni
-               
+                    let encontrado=cliente.data[0]
+
+                if (tipo=='garante') {
+                         this.garante=encontrado
+                    
                 }
                 else{
-                    this.$swal('Cliente no encontrado','warning')
+                    this.cliente=encontrado
+                }
+               
+                   
+                }
+                else{
+                    let mensaje= tipo + ' no encontrado'
+                    this.$swal(mensaje,'warning')
                     this.cliente=''
                     
                     
@@ -272,6 +310,8 @@ export default {
                 
             }finally{
                 this.loading=false
+                this.buscar_garante=''
+                this.buscar_solicitante=''
             }
         },
         async getnumcuenta(){
@@ -369,7 +409,7 @@ export default {
         if (this.cliente.dni != '' && this.garante != '' && this.total != 0 && this.productos.length > 0) {
             console.log('******++++',this.productos)
             datos={'solicitante':this.cliente.dni,
-                    'garante':this.garante,
+                    'garante':this.garante.dni,
                     'importe':this.total,
                     'anticipo':parseFloat(this.anticipo),
                     'metodo_pago':this.metodo,

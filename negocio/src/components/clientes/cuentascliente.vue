@@ -78,6 +78,33 @@
         {{ row.value.first }} {{ row.value.last }}
       </template>
 
+         <template #cell(actions)="row">
+        <!-- <b-button size="sm" @click="deletemodal(row.item, row.index, $event.target)" class="mr-1">
+         Eliminar
+        </b-button> -->
+   
+        <b-button id="editarcuenta"  class="action" size="sm" @click="abrirmodal('modificar',getcuenta(row.item))">    <b-icon icon="tag-fill"></b-icon></b-button>
+            <b-tooltip target="editarcuenta" triggers="hover">
+                Editar esta cuenta
+              </b-tooltip>
+           <b-button  id="eliminarcuenta" class="action" size="sm" @click="deleteswal(row.item)">
+         <b-icon icon="trash-fill"></b-icon>
+        </b-button>
+             <b-tooltip target="eliminarcuenta" triggers="hover">
+                Eliminar esta cuenta
+              </b-tooltip>
+
+
+        <b-button id="detallecuenta" class="action" size="sm" @click="detallecuenta(row.item)">    <b-icon icon="folder2"></b-icon></b-button>
+         <b-tooltip target="detallecuenta" triggers="hover">
+                Detalle de esta cuenta
+              </b-tooltip>
+
+         <b-button class="action" size="sm" id="cuotaspagos"  @click="detallepagos(row.item)">    <b-icon icon="wallet2"></b-icon></b-button>
+                 <b-tooltip target="cuotaspagos" triggers="hover">
+                Cuotas y pagos de esta cuenta
+              </b-tooltip>
+      </template>
       <!-- <template #cell(actions)="row">
        <b-button size="sm" @click="deletemodal(row.item, row.index, $event.target)" class="mr-1">
          Eliminar
@@ -170,7 +197,9 @@ import APICuentas from '../../apis/cuentas'
   },
   methods:{
     async getcuentas(){
-      const datos= await APICuentas.cuentasbycliente(this.dnicliente)
+      console.log(this.dnicliente)
+      const datos= await APICuentas.cuentasbycliente(this.dnicliente,null)
+      console.log(datos)
       this.cuentas = datos
     },
          onFiltered(filteredItems) {
@@ -178,7 +207,14 @@ import APICuentas from '../../apis/cuentas'
         this.totalRows = filteredItems.length
         this.currentPage = 1
       },
-
+     detallepagos(cuenta){
+        console.log(cuenta.id)
+        this.$router.push({path :'/detallepagos',query:{num_cuenta:cuenta.numero_cuenta ,id_cuenta:cuenta.id}});
+      },
+       detallecuenta(cuenta){
+        
+        this.$router.push({path :'/detallecuenta',query:{num_cuenta:cuenta.numero_cuenta ,solicitante_dni:cuenta.solicitante_dni}});
+      },
   }
 
   }

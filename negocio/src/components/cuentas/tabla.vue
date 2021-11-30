@@ -72,7 +72,9 @@
       <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template>
-
+      <template #empty="texto">
+      <h4>{{texto}}</h4>
+    </template>
       <template #cell(actions)="row">
         <!-- <b-button size="sm" @click="deletemodal(row.item, row.index, $event.target)" class="mr-1">
          Eliminar
@@ -90,12 +92,12 @@
               </b-tooltip>
 
 
-        <b-button id="detallecuenta" class="action" size="sm" @click="detallecuenta(row.item)" >    <b-icon icon="folder2"></b-icon></b-button>
+        <b-button id="detallecuenta" class="action" size="sm" @click="detallecuenta(row.item)">    <b-icon icon="folder2"></b-icon></b-button>
          <b-tooltip target="detallecuenta" triggers="hover">
                 Detalle de esta cuenta
               </b-tooltip>
 
-         <b-button class="action" size="sm" id="cuotaspagos">    <b-icon icon="wallet2"></b-icon></b-button>
+         <b-button class="action" size="sm" id="cuotaspagos"  @click="detallepagos(row.item)">    <b-icon icon="wallet2"></b-icon></b-button>
                  <b-tooltip target="cuotaspagos" triggers="hover">
                 Cuotas y pagos de esta cuenta
               </b-tooltip>
@@ -146,6 +148,7 @@ import APICuentas from '../../apis/cuentas'
         totalRows: 1,
         currentPage: 1,
         perPage: 10,
+        texto:'texto',
      
         pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
         sortBy: '',
@@ -188,9 +191,13 @@ import APICuentas from '../../apis/cuentas'
         abrirmodal(accion,cuenta){
           this.$refs.modal.showModal(accion,cuenta);
       },
-      detallecuenta(cuenta){
+      detallepagos(cuenta){
         console.log(cuenta.id)
-        this.$router.push({path :'/detallecuenta',query:{num_cuenta:cuenta.numero_cuenta ,id_cuenta:cuenta.id}});
+        this.$router.push({path :'/detallepagos',query:{num_cuenta:cuenta.numero_cuenta ,id_cuenta:cuenta.id}});
+      },
+       detallecuenta(cuenta){
+        
+        this.$router.push({path :'/detallecuenta',query:{num_cuenta:cuenta.numero_cuenta ,solicitante_dni:cuenta.solicitante_dni}});
       },
 
 

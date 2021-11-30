@@ -1,15 +1,11 @@
 <template>
   <div>
-    <b-modal
-      id="modal-prevent-closing"
-      ref="modal"
-      :title="this.titulo"
-      ok-title="Guardar"
-      @show="this.resetModal"
-      @hidden="this.resetModal"
-      @ok="this.handleOk"
-    >
-      <form ref="form" @submit.stop.prevent="this.handleSubmit">
+  <b-container>
+      <b-row align-h="between">
+        <b-col cols="4">   <h3>Numero de cliente {{this.cliente.numero_cliente}}</h3></b-col>
+        <b-col cols="2">  <b-button style="margin:10px;" to="clientes"><b-icon icon="arrow-left-circle-fill"></b-icon></b-button></b-col>
+        </b-row>
+           <form ref="form" @submit.stop.prevent="this.handleSubmit">
 
 <b-row>
 <b-col>
@@ -265,15 +261,17 @@
 
 </b-col>
 </b-row>
-       
-
-    
-
-
 
       <b-alert variant="warning" :show="alert">Complete todos los campos</b-alert>
+
+         <b-row align-v="center">
+        <b-col ><b-button style="margin:10px;" @click="deleteswal()" ><b-icon icon="trash-fill"></b-icon></b-button>  </b-col>
+        <b-col>   <b-button @click="modificarcliente()">Editar cliente</b-button></b-col>
+        </b-row>
       </form>
-    </b-modal>
+
+  </b-container>
+ 
   </div>
 </template>
 
@@ -281,7 +279,7 @@
 
 import APIClientes from '../../apis/clientes'
   export default {
-    name:'ModalCliente',
+    name:'EditarCliente',
    
     data() {
       return {
@@ -289,35 +287,11 @@ import APIClientes from '../../apis/clientes'
          domicilio: {
             localidad:'',
             codigo_postal:4172,
-            direccion:'hola bebe',
+            direccion:'',
 
           },
-        cliente:{
-          nombre:'',
-          apellido:'',
-          dni:'',
-          
-          telefono:'',
-          sueldo:'',
-          fecha_nacimiento:'',
-          edad:'',
-          boleta_sueldo:'',
-          lugar_trabajo:'',
-          tipo:'',
-          garante:false,
-          solicitante:false,
-         
-          email:'',
-          referente:'',
-          direccion:''
-          
-          
-
-          
-
-
-
-        },
+        cliente:null,
+        dnicliente:null,
        
         activo:'',
         
@@ -347,7 +321,23 @@ import APIClientes from '../../apis/clientes'
        
       }
     },
+   created(){
+    this.dnicliente=this.$route.query.dni
+    console.log(this.dnicliente)
+    },
+    mounted(){
+    this.getcliente()
+    
+  },
     methods: {
+    async getcliente(){
+   
+      const cliente= await APIClientes.getclientebyid(this.dnicliente,null)
+
+      this.cliente = cliente.data[0]
+      this.domicilio=this.cliente.domicilio
+
+    },
       checkFormValidity() {
         const valid = this.$refs.form.checkValidity()
         if (valid==false) {
@@ -378,102 +368,15 @@ import APIClientes from '../../apis/clientes'
 
       },
       
-      handleOk(bvModalEvt) {
-       
-        bvModalEvt.preventDefault()
-       
-        this.handleSubmit()
-      },
-    cerrarModal(){
-          this.$bvModal.hide('modal-prevent-closing')
-     },
-      handleSubmit() {
-       
-        if (!this.checkFormValidity()) {
-          return
-        }
-        console.log(this.accion)
-        if (this.accion=='crear'){
-          console.log('lalma crear')
-          this.crearcliente()
-        }
-        else if(this.accion=='modificar'){
-          this.modificarcliente()
-          console.log('lalma mod')
-        }
-        else{
-          console.log('lalma nada')
-        }
-        
-        this.$nextTick(() => {
-          
-
-          //AQUI DEBERIA EMITIR UN EVENTO HACIA EL COMPONENTE PADRE PARA ACTUALIZAR LOS DATOS
-
-        })
-      },
-      recargartabla(){
-          this.$emit("avisar")
-
-      },
-        showModal(accion,cliente) {
-        this.$refs['modal'].show()
-        if (accion=='modificar') {
-          this.cliente=cliente
-          this.domicilio=this.cliente.domicilio
-          this.titulo='Modificar cliente'
-        } else if (accion=='crear') {
-          this.cliente={}
-          this.titulo='Nuevo cliente'
-          
-        }
-        this.accion=accion
-      },
-
-        async crearcliente(){
-          
-          
-        const cliente={
-            'nombre':this.cliente.nombre,
-            'apellido':this.cliente.apellido,
-            'dni':parseInt(this.cliente.dni),
-            'boleta_sueldo':parseInt(this.cliente.boleta_sueldo),
-            'telefono':parseInt(this.cliente.telefono),
-            'sueldo':parseFloat(this.cliente.sueldo),
   
-            'referente':this.cliente.referente,
-            'domicilio': this.domicilio,
-        
-            'lugar_trabajo':this.cliente.lugar_trabajo,
-            'fecha_nacimiento':this.cliente.fecha_nacimiento,
-            'edad':this.cliente.edad,
-            'email':this.cliente.email,
-            'garante':this.cliente.garante,
-            'solicitante':this.cliente.solicitante,
-        }
-        try{
-            const response=await APIClientes.addcliente(cliente)
-            if (response.status==201) {
-                this.$swal('En buena hora!','Un nuevo cliente fue agregado','success');
-                this.cerrarModal();
-                this.$emit('recargar')
-
-            }
-        }
-        catch(error){
-          console.log(error)
-            this.$swal('Error!Muestre esta ventana al desarrollador',error.message,'warning');
-            
-        }
-      
-    },
+ 
      async modificarcliente(){
         try{
-           const response=await APIClientes.updatecliente(this.cliente.id,this.cliente)
+            let cliente =this.cliente
+            cliente.domicilio=this.domicilio
+           const response=await APIClientes.updatecliente(this.cliente.id,cliente)
               if (response.status==200) {
                 this.$swal('Bien hecho','El cliente fue modificado con exito','success');
-                this.cerrarModal();
-                this.$emit('recargar')
 
             }
         }
@@ -482,6 +385,57 @@ import APIClientes from '../../apis/clientes'
         }
             
       },
+    async deletecliente(){
+         try{
+           const response=await APIClientes.deletecliente(this.cliente.id)
+           const texto=cliente.nombre + ' ' + cliente.apellido
+              if (response.status==200) {
+                this.$swal(
+                'BORRADO!',
+                 texto.toUpperCase() + 'HA SIDO BORRADO',
+                'success'
+              )
+              
+            }
+            else if(response.status==204){
+              this.$swal(
+                'BORRADO!',
+                 texto.toUpperCase() + ' HA SIDO BORRADO',
+                'success'
+              )
+              this.$router.push('clientes')
+              
+            }
+        }
+           catch(error){
+               this.$swal(
+                'ERROR ! MUESTRE ESTA VENTANA AL DESARROLLADOR',
+                 error,
+                'error'
+              )
+        }
+            
+      },
+      confirmswal(titulo,texto){
+        return this.$swal({
+            title: titulo.toUpperCase(),
+            text: texto,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'SI, BORRAR',
+            cancelButtonText:'CANCELAR'
+          })
+      },
+      deleteswal(cliente){
+         const titulo=cliente.nombre + ' ' + cliente.apellido
+         const texto="Seguro quieres borrar a este cliente ?"
+         this.confirmswal(titulo,texto).then((result) => {
+            if (result.isConfirmed) {
+             this.deletecliente(cliente)}
+})
+      }
       },
      
   }

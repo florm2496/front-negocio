@@ -37,9 +37,24 @@ class APICuentas{
      
         
     }
-    async cuentasbycliente(cliente){
+    async getDetalleCuentas(num_cuenta,solicitante){
+        let u=url + 'detallescuenta'
+        const headers= await this.getheaders();
+        const params = {
+            'numero_cuenta':num_cuenta,
+            'dni_solicitante':solicitante,
+        }
+        const detalles =await api.get(u,{params},{headers})
+
+        return detalles.data;
+        
+     
+        
+    }
+    async cuentasbycliente(cliente,numero_cuenta){
         let u=url + 'reportescuentas'
-        let params = {'cliente':cliente}
+        let params = {'cliente':cliente,
+                        'numero_cuenta':numero_cuenta}
         const headers= await this.getheaders();
         
         const cuentas =await api.get(u,{params},{headers})

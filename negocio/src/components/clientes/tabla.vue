@@ -76,18 +76,13 @@
         <!-- <b-button size="sm" @click="deletemodal(row.item, row.index, $event.target)" class="mr-1">
          Eliminar
         </b-button> -->
-      <b-button id="eliminar-cliente" size="sm" @click="deleteswal(row.item)" class="action" >
-         <b-icon icon="trash-fill"></b-icon>
-        </b-button>
 
-        <b-button id="modificar-cliente" size="sm" class="action"  @click="abrirmodal('modificar',getcliente(row.item))"><b-icon icon="tag-fill"></b-icon></b-button>
+
+        <b-button id="modificar-cliente" size="sm" class="action"  @click="detallecliente(row.item)"><b-icon icon="tag-fill"></b-icon></b-button>
         <b-button id="cuentas-cliente" class="action" size="sm" @click="cuentascliente(row.item)" ><b-icon  icon="card-checklist"></b-icon></b-button>
 
-           <b-tooltip target="eliminar-cliente" triggers="hover">
-                Eliminar esta cliente
-              </b-tooltip>
                  <b-tooltip target="modificar-cliente" triggers="hover">
-                Modificar este cliente
+                Ver detalles
               </b-tooltip>
                  <b-tooltip target="cuentas-cliente" triggers="hover">
                 Cuentas de este cliente
@@ -152,10 +147,12 @@ import ModalCliente from './modalclientes.vue'
             
         accion:'',
         fields:[
+          { key: 'numero_cliente', label: 'Numero de cliente', class: 'text-center' },
           { key: 'apellido', label: 'Apellido', sortable: true, sortDirection: 'desc' },
           { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-center' },
-          { key: 'tipo', label: 'Tipo', sortable: true, class: 'text-center' },
           { key: 'dni', label: 'DNI', sortable: true, class: 'text-center' },
+          { key: 'telefono', label: 'Telefono', sortable: true, class: 'text-center' },
+          
           
           //{ key: 'sueldo', label: 'Sueldo', sortable: true, class: 'text-center' },
           //{ key: 'telefono', label: 'Telefono', sortable: true, class: 'text-center' },
@@ -213,42 +210,15 @@ import ModalCliente from './modalclientes.vue'
        let nombrecompleto= cliente.nombre + ' ' + cliente.apellido
        this.$router.push({path :'/cuentascliente',query:{dni:cliente.dni,nombre:nombrecompleto}});
      },
-  
+      detallecliente(cliente){
+        this.$router.push({path :'/editarcliente',query:{dni:cliente.dni }});
+
+      },
       getcliente(cliente){
         this.objetocliente=Object.assign({},cliente);
         return this.objetocliente
       },
-      async deletecliente(cliente){
-         try{
-           const response=await APIClientes.deletecliente(cliente.id)
-           const texto=cliente.nombre + ' ' + cliente.apellido
-              if (response.status==200) {
-                this.$swal(
-                'BORRADO!',
-                 texto.toUpperCase() + 'HA SIDO BORRADO',
-                'success'
-              )
-              this.cargar()
-            }
-            else if(response.status==204){
-              this.$swal(
-                'BORRADO!',
-                 texto.toUpperCase() + 'HA SIDO BORRADO',
-                'success'
-              )
-              this.cargar()
-              
-            }
-        }
-           catch(error){
-               this.$swal(
-                'ERROR ! MUESTRE ESTA VENTANA AL DESARROLLADOR',
-                 error,
-                'error'
-              )
-        }
-            
-      },
+     
 
       resetInfoModal() {
         this.infoModal.title = ''
@@ -267,27 +237,7 @@ import ModalCliente from './modalclientes.vue'
           const datos=cliente
           return datos
       },
-    
-      confirmswal(titulo,texto){
-        return this.$swal({
-            title: titulo.toUpperCase(),
-            text: texto,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'SI, BORRAR',
-            cancelButtonText:'CANCELAR'
-          })
-      },
-      deleteswal(cliente){
-         const titulo=cliente.nombre + ' ' + cliente.apellido
-         const texto="Seguro quieres borrar a este cliente ?"
-         this.confirmswal(titulo,texto).then((result) => {
-            if (result.isConfirmed) {
-             this.deletecliente(cliente)}
-})
-      }
+
 
     }
   }

@@ -130,7 +130,7 @@ export default {
           { key: 'codigo', label: 'Codigo', sortable: true, class: 'text-center' },
           { key: 'precio', label: 'Precio', sortable: true, class: 'text-center' },
           { key: 'tipo', label: 'Tipo', sortable: true, class: 'text-center' },
-          { key: 'stock', label: 'Stock', sortable: true, class: 'text-center' },
+          // { key: 'stock', label: 'Stock', sortable: true, class: 'text-center' },
           { key: 'cant_vendida', label: 'Cant vendida', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Acciones' }
 

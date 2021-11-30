@@ -34,6 +34,13 @@
                     Ingresos
                 </div>
             </router-link>
+
+                
+              <router-link to="/utilidades" active-class="active" tag="button" exact class="side-btn">
+                <div class="link-container">
+                   Utilidades
+                </div>
+            </router-link>
   
                <router-link to='/login' active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">

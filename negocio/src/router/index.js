@@ -21,6 +21,11 @@ const routes = [
         component: () => import('../views/ViewClientes.vue')
       },
       {
+        path: 'editarcliente',
+        name:'editarcliente',
+        component: () => import('../components/clientes/editarCliente.vue')
+      },
+      {
         path: 'cuentascliente',
         component: () => import('../components/clientes/cuentascliente.vue'),
         name:'cuentascliente'
@@ -48,7 +53,12 @@ const routes = [
       },
       {
         path: 'detallecuenta',
-        component: () => import('../components/cuentas/detallecuentas.vue'),
+        component: () => import('../components/cuentas/detallecuenta.vue'),
+  
+      },
+      {
+        path: 'detallepagos',
+        component: () => import('../components/cuentas/detallepagos.vue'),
   
       },
       {
@@ -60,6 +70,13 @@ const routes = [
         path: 'nuevosingresos',
         name: 'nuevosingresos',
         component: () => import('../components/ingresos/nuevoingreso.vue'),
+        
+  
+      },
+      {
+        path: 'utilidades',
+        name: 'utilidades',
+        component: () => import('../components/utilidades/utilidades.vue'),
         
   
       },
