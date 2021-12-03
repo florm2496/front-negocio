@@ -71,8 +71,6 @@
   </b-form-group>
       <br>
 
-      <b-form-checkbox v-model="producto.estado">Estado</b-form-checkbox>
-
       <b-alert variant="warning" :show="alert">Complete todos los campos</b-alert>
       </form>
     </b-modal>
@@ -91,10 +89,11 @@ import APIProductos from '../../apis/productos'
           nombre:'',
           codigo:'',
           precio:'',
-          tipo:null,
+          tipo:'',
           stock:'',
-          estado:false,
+          estado:true,
         },
+
         titulo:'',
         elect:'hola',
     
@@ -106,8 +105,12 @@ import APIProductos from '../../apis/productos'
         response:null,
         alert:false,
         accion:'',
+        estado_producto:true,
        
       }
+    },
+    mounted(){
+      this.estado_producto=true
     },
     methods: {
       checkFormValidity() {

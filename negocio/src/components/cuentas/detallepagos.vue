@@ -117,9 +117,8 @@
      label="Fecha de vencimiento"
      type="date"
      >
-         <b-form-input v-model="fecha_refinanciada" >
+         <b-button v-model="fecha_refinanciada">Fecha refinanciada</b-button>
 
-    </b-form-input>
      </b-form-group>
       <b-button class="mt-2" variant="outline-warning" block @click="refinanciar_cuenta()">Refinanciar</b-button>
     </b-modal>
@@ -149,19 +148,19 @@
         <b-button size="sm" @click="verpagos(row.item,row.index)"> <b-icon icon="eye-fill"></b-icon> </b-button>
 
       </template>
-
+<!-- 
       <template #cell(actions)="row">
     
           <b-button size="sm" @click="eliminar(row.item,row.index)"> <b-icon icon="x"></b-icon> </b-button>
     
 
-      </template>
+      </template> -->
 
            </b-table>
       </b-container>
   
     
-    <b-modal ref="my-modal" hide-footer :title="titulo_modal">
+    <b-modal ref="modal-pagos" hide-footer :title="titulo_modal">
       <b-container>
         <h4>Nuevo pago</h4>
        <b-row class="spacing">
@@ -179,15 +178,10 @@
           
        </b-col>
        <b-col>
-           <b-form-input
-          id="metodo_pago"
-          v-model="nuevo_pago.metodo"
-          :disabled="cuotapagada"
-          type="text"
-          placeholder="Metodo de pago"
-        ></b-form-input>
+         <v-select id="metodo_id" v-model="nuevo_pago.metodo" :disabled="cuotapagada" :options="metodos" />
+    
        </b-col>
-      <b-col lg="2"> <b-button variant="success" @click="validardatospago()" size="sm">Pagar</b-button></b-col>
+      <b-col lg="2"> <b-button variant="success" @click="validardatospago()" :disabled="disabled_pagar" size="sm">Pagar</b-button></b-col>
      </b-row>
       </b-container>
       <div class="d-block text-center">
@@ -227,7 +221,9 @@ export default {
             solicitante:0,
             cuotas_refinanciadas:0,
             pagos:null,
+            fecha_refinanciada:'',
             hora:'',
+            metodos:['Efectivo','T credito','T debito','Transferencia'],
           
             nuevo_pago: {
                 'monto':0,
@@ -284,6 +280,28 @@ export default {
       
       
     },
+    computed:{
+
+      disabled_pagar(){
+        var hab=true
+        console.log('------',this.nuevo_pago.metodo)
+        if (this.nuevo_pago.monto!=0 && this.nuevo_pago.metodo.length==0) {
+            hab=false
+            console.log(this.nuevo_pago.monto)
+            console.log('------',typeof(this.nuevo_pago.metodo),this.nuevo_pago.metodo.length)
+            console.log('entra aqui')
+          
+        }
+        else{
+          console.log('no cumple')
+        }
+        return (
+          hab
+        );
+            },
+
+
+    },
     mounted(){
         this.hora = new Date()
         //numero de cuenta, anticipo ,fecha , meodo de pago, saldo , cuotas , pagos
@@ -307,26 +325,48 @@ export default {
           this.cuota_actual=cuota
           this.cuotapagada=cuota.pagada
           this.saldo_cuota=cuota.saldo
-          this.$refs['my-modal'].show()
+          this.nuevo_pago.monto=cuota.saldo
+          this.$refs['modal-pagos'].show()
           this.titulo_modal='Cuota ' + cuota.numero_cuota
           this.pagos = cuota.pagos_cuotas
 
         },
         validardatospago(){
           if (this.cuotapagada == false) {
-             if (this.nuevo_pago.monto > this.cuota_actual.saldo || this.nuevo_pago.monto <= 0 ) {
-            this.$swal('No se realizo el pago','Recuerde que el pago no puede ser superior al monto de la cuota ni puede ser menor o igual a 0')
+             if (this.nuevo_pago.monto <= 0 ) {
+              this.$swal('El monto del pago debe ser mayor a 0','','warning')
             
-          }
-        
-          else{
-            this.realizarpago()
+              }
+              else if(this.nuevo_pago.monto > this.cuota_actual.saldo){
+                // this.$swal('Esta ingresando un importe superior a esta cuota , desea descontar la diferencia de la siguiente cuota?','','warning')
+                this.$swal({
+                  title: 'Vas a pagar mas del importe de esta cuota. Quieres descontar la diferencia a la siguiente cuota?',
+                  showDenyButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: 'Confirmar',
+              
+                }).then((result) => {
+             
+                  if (result.isConfirmed) {
 
-          }
+                    this.$swal('Pagado!', '', 'success')
+                  } else if (result.isDenied) {
+                    this.$swal('Operacion cancelada', '', 'info')
+
+
+                  }
+                })
+
+              }
             
-          }else{
-            this.$swal('CUOTA SALDADA')
-          }
+              else{
+                this.realizarpago()
+
+              }
+                
+              }else{
+                this.$swal('CUOTA SALDADA')
+              }
          
 
         },
@@ -349,7 +389,6 @@ export default {
           }
           try{
             const response = await APICuentas.nuevopago(nuevo_pago);
-            console.log('dhdhddhhd',response)
             if (response.status==200) {
               this.$swal('Bien hecho','Nuevo pago agregado','success')
               let nuevo_pago = response.pago

@@ -36,6 +36,16 @@ class APIProductos{
      
         
     }
+    async getProductosActivos(){
+        let url='productosactivos/'
+        const headers= await this.getheaders();
+        const productos =await api.get(url,{headers})
+    
+        return productos.data;
+        
+     
+        
+    }
     async agregarProducto(producto){
         const headers= await this.getheaders();
 

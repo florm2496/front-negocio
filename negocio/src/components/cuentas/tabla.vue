@@ -64,7 +64,7 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       stacked="md"
-      show-empty
+      empty-text="No hay cuentas registradas" show-empty
       small
       @filtered="onFiltered"
       id="tabla-cuentas"
@@ -72,9 +72,10 @@
       <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template>
-      <template #empty="texto">
-      <h4>{{texto}}</h4>
+        <template #empty="scope">
+      <h3>{{ scope.emptyText }}</h3>
     </template>
+   
       <template #cell(actions)="row">
         <!-- <b-button size="sm" @click="deletemodal(row.item, row.index, $event.target)" class="mr-1">
          Eliminar
@@ -166,7 +167,8 @@ import APICuentas from '../../apis/cuentas'
           { key: 'numero_cuenta', label: 'Numero de cuenta', sortable: true, class: 'text-center' },
           { key: 'solicitante_nombre', label: 'Solicitante', sortable: true, sortDirection: 'desc' },
           { key: 'solicitante_dni', label: 'DNI solicitante', sortable: true, sortDirection: 'desc' },
-          { key: 'garante', label: 'Garante', sortable: true, class: 'text-center' },
+          { key: 'garante1', label: 'Garante 1', sortable: true, class: 'text-center' },
+          { key: 'garante2', label: 'Garante 2', sortable: true, class: 'text-center' },
           { key: 'importe', label: 'Importe', sortable: true, class: 'text-center' },
           { key: 'fecha', label: 'Fecha', sortable: true, class: 'text-center' },
           
@@ -204,6 +206,7 @@ import APICuentas from '../../apis/cuentas'
 
       async getCuentas(){
           const consulta=await APICuentas.getCuentas();
+          console.log(consulta)
           this.datos=consulta
           this.display_alert=true;
       },

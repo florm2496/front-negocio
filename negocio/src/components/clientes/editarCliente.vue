@@ -388,7 +388,7 @@ import APIClientes from '../../apis/clientes'
     async deletecliente(){
          try{
            const response=await APIClientes.deletecliente(this.cliente.id)
-           const texto=cliente.nombre + ' ' + cliente.apellido
+           const texto=this.cliente.nombre + ' ' + this.cliente.apellido
               if (response.status==200) {
                 this.$swal(
                 'BORRADO!',

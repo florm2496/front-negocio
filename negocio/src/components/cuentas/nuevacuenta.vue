@@ -32,10 +32,17 @@
      <b-col cols="2" class="mr-auto p-3">
          <b-button @click="buscarCliente(buscar_garante,'garante')" :disabled="garante_disabled" ><b-icon icon="search"></b-icon></b-button>
          </b-col>
-          <b-col cols="4" class="mr-auto p-3"><label for="">Documento</label></b-col>
-    <b-col cols="auto" class="mr-auto p-3"><b-form-input v-model="garante.dni" disabled/></b-col>
-       <b-col cols="4" class="mr-auto p-3"><label for="">Nombre</label></b-col>
-    <b-col cols="auto" class="mr-auto p-3"><b-form-input v-model="garante.nombre" disabled/></b-col> 
+          <b-col cols="1" class="mr-auto p-3"><label for="">Doc</label></b-col>
+    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante1.dni" disabled/></b-col>
+       <b-col cols="2" class="mr-auto p-3"><label for="">Nombre</label></b-col>
+    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante1.nombre" disabled/></b-col> 
+        <b-col cols="3" class="mr-auto p-3"> <b-button @click="eliminar_garante('1')">X</b-button> </b-col> 
+
+              <b-col cols="1" class="mr-auto p-3"><label for="">Doc</label></b-col>
+    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante2.dni" disabled/></b-col>
+       <b-col cols="2" class="mr-auto p-3"><label for="">Nombre</label></b-col>
+    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante2.nombre" disabled/></b-col> 
+            <b-col cols="3" class="mr-auto p-3"> <b-button @click="eliminar_garante('2')" >X</b-button> </b-col> 
         </b-row>
             </b-col>
 
@@ -52,9 +59,10 @@
                     <b-col cols="2"  class="mr-auto p-3"><label for="">N°c</label></b-col>
                     <b-col cols="3"  class="mr-auto p-3"><b-form-input v-model="num_cuenta" disabled></b-form-input></b-col>
 
-                     <b-col cols="2"  class="mr-auto p-3"><label for="">Metodo pago</label></b-col>
+                     <b-col cols="2"  class="mr-auto p-3"><label for="">Total</label></b-col>
                     <b-col cols="4" class="mr-auto p-3">
-                        <v-select id="metodo_id" v-model="metodo" :options="metodos"></v-select>
+                        <b-form-input v-model="totaldesc" disabled></b-form-input>
+                    
                         </b-col>
                    
                    </b-row>
@@ -75,16 +83,18 @@
 
                    
                
-                    <b-col cols="2"  class="mr-auto p-3"><label for="">Venc</label></b-col>
-                    <b-col cols="5" class="mr-auto p-3"><b-form-input v-model="fecha_venc" type="date"></b-form-input></b-col>
+                    <b-col cols="3"  class="mr-auto p-3"><label for="">Metodo de pago</label></b-col>
+                    <b-col cols="4" class="mr-auto p-3"><v-select id="metodo_id" v-model="metodo" :options="metodos"></v-select>
+            </b-col>
+                    <!-- <b-col cols="5" class="mr-auto p-3"><b-form-input v-model="fecha_venc" type="date"></b-form-input></b-col> -->
                 
 
                 </b-row>
                    <b-row>
                     <!-- <b-col cols="2"  class="mr-auto p-3"><label for="">Descuento</label></b-col> -->
                     <!-- <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="descuento"></b-form-input></b-col> -->
-                    <b-col cols="2"  class="mr-auto p-3"><label for="">Total</label></b-col>
-                    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="totaldesc" disabled></b-form-input></b-col>
+                    <b-col cols="6"  class="mr-auto p-3"><label for="">Fecha de vencimiento</label></b-col>
+                    <b-col cols="6" class="mr-auto p-3"><b-form-datepicker id="example-datepicker" v-model="fecha_venc" class="mb-2"  locale="es" placeholder="Seleccione fecha" label-help=""></b-form-datepicker>  </b-col>
                    </b-row>
 
                 </b-row>
@@ -95,7 +105,7 @@
                 </b-row>
                   <b-row>
                       <b-col></b-col>
-                      <b-col cols="auto" ><b-button @click="vender()" ><b-icon icon="cart-check"></b-icon> Vender</b-button></b-col>
+                      <b-col cols="auto" ><b-button @click="vender()" :disabled="vender_disabled"><b-icon icon="cart-check"></b-icon> Vender</b-button></b-col>
                             <b-col></b-col>
                 </b-row>
             </b-col>
@@ -171,7 +181,8 @@ export default {
             loading:false,
             buscar_garante:'',
             buscar_solicitante:'',
-            garante:'',
+            garante1:'',
+            garante2:'',
             solicitante:null,
             cuotas:0,
             importe:0,
@@ -222,6 +233,7 @@ export default {
  
     mounted(){
         this.getnumcuenta()
+        
 
 
     },
@@ -235,20 +247,20 @@ export default {
                     estado
                 );
                 },
-                    garante_disabled() {
-                    var estado = true
-                    if (this.buscar_garante != '') {
-                        estado=false
-                    }
+                garante_disabled() {
+                var estado = true
+                if (this.buscar_garante != '') {
+                    estado=false
+                }
                 return (
                     estado
                 );
                 },
-                    solicitante_disabled() {
-                    var estado = true
-                    if (this.buscar_solicitante != '') {
-                        estado=false
-                    }
+                solicitante_disabled() {
+                var estado = true
+                if (this.buscar_solicitante != '') {
+                    estado=false
+                }
                 return (
                     estado
                 );
@@ -263,21 +275,42 @@ export default {
                     );
                     },
 
-       totaldesc(){
-           var total= this.total
-           if ((this.descuento >= 0 && this.descuento <= total) && (this.anticipo >= 0 && this.anticipo <= total)){
-              
-                total=this.total - this.descuento - this.anticipo
-           }
-            return (
-                total
-            );
-          
-       }
-  
+                totaldesc(){
+                    var total= this.total
+                    if ((this.descuento >= 0 && this.descuento <= total) && (this.anticipo >= 0 && this.anticipo <= total)){
+                        
+                            total=this.total - this.descuento - this.anticipo
+                    }
+                        return (
+                            total
+                        );
+                    
+                },
+
+                vender_disabled(){
+                    let total= this.total
+                    let cuotas=this.cuotas
+
+                    var habilitar=true
+                    if (total != 0 && cuotas != 0 && this.cliente.dni != '' && this.garante1 != '' && this.garante2 != '' && this.total != 0 && this.productos.length > 0 && this.fecha_venc!='') {
+                        habilitar=false
+                    }
+
+                    return habilitar
+                }
+            
 
     },
     methods:{
+        eliminar_garante(garante){
+            if (garante==1) {
+                this.garante1=''
+            }
+            else if(garante==2){
+                this.garante2=''
+            }
+
+        },
         async buscarCliente(tipo_cliente,tipo){
             try{
                 this.loading=true
@@ -289,7 +322,14 @@ export default {
                     let encontrado=cliente.data[0]
 
                 if (tipo=='garante') {
-                         this.garante=encontrado
+                        if (this.garante1 == '') {
+                            this.garante1=encontrado
+                            
+                        }
+                        else if (this.garante2 =='' ){
+                            this.garante2=encontrado
+                        }
+                         
                     
                 }
                 else{
@@ -358,8 +398,7 @@ export default {
         this.subtotales.splice(fila,1)
         this.cantidades.splice(fila,1)
 
-        console.log(this.productos)
-        console.log(this.cantidades)
+
 
       },
       reset(){
@@ -403,13 +442,59 @@ export default {
       this.total=total
 
       },
+
+    verificar_fecha(){
+            let f = new Date();
+            let fv=new Date(this.fecha_venc);
+
+
+            let c_month=f.getMonth() + 1
+
+            let c_day=f.getDate()
+
+            let c_year=f.getFullYear()
+
+
+            
+            let fv_month=fv.getMonth() + 1
+
+            let fv_day=fv.getDate() + 1
+
+            let fv_year=fv.getFullYear()
+
+            console.log(fv_month,fv_day)
+
+            var pasa=false
+
+            if (fv_year > c_year) {
+
+                pasa=true
+
+
+            }
+            else if(fv_year == c_year){
+
+                 if (fv_month >= c_month && fv_day > c_day) {
+                    pasa= true
+
+                 }
+                 else{
+                     pasa=false
+                 }
+                
+            }
        
+            return pasa
+    },
+    
     vender(){
         var datos={}
-        if (this.cliente.dni != '' && this.garante != '' && this.total != 0 && this.productos.length > 0) {
-            console.log('******++++',this.productos)
+        var fv=this.verificar_fecha()
+        
+        if (fv == true) {
             datos={'solicitante':this.cliente.dni,
-                    'garante':this.garante.dni,
+                    'garante1':this.garante1.dni,
+                    'garante2':this.garante2.dni,
                     'importe':this.total,
                     'anticipo':parseFloat(this.anticipo),
                     'metodo_pago':this.metodo,
@@ -422,9 +507,11 @@ export default {
                     'descuentos':this.descuentos,
                     'subtotales':this.subtotales,
             }
-            console.log(this.cantidades,this.productos)
             this.agregarventa(datos)
             
+        }
+        else{
+            this.$swal('Fecha incorrecta','La fecha debes ser superior a hoy !','error')
         }
     },
        async agregarventa(datos){
@@ -439,7 +526,7 @@ export default {
         
             }catch(error){
                 console.log('////////////////',error)
-                this.$swal('cddffdfffff',error,'error')
+                this.$swal('Ocurrio un error',String(error),'error')
                 
             }
         }

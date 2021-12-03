@@ -118,8 +118,6 @@ export default {
           { key: 'nombre', label: 'Nombre', sortable: true, sortDirection: 'desc' },
           { key: 'precio', label: 'Precio', sortable: true, class: 'text-center' },
           { key: 'tipo', label: 'Tipo', sortable: true, class: 'text-center' },
-
-          { key: 'stock', label: 'Stock', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Elegir' }
 
             ],
