@@ -178,7 +178,7 @@
           
        </b-col>
        <b-col>
-         <v-select id="metodo_id" v-model="nuevo_pago.metodo" :disabled="cuotapagada" :options="metodos" />
+         <v-select id="metodo_id" v-model="nuevo_pago.metodo" :options="metodos" />
     
        </b-col>
       <b-col lg="2"> <b-button variant="success" @click="validardatospago()" :disabled="disabled_pagar" size="sm">Pagar</b-button></b-col>
@@ -220,14 +220,17 @@ export default {
             garante : 0,
             solicitante:0,
             cuotas_refinanciadas:0,
+            excedente:0,
             pagos:null,
             fecha_refinanciada:'',
+            show_excedente:false,
+            mensaje_excedente:'',
             hora:'',
             metodos:['Efectivo','T credito','T debito','Transferencia'],
           
             nuevo_pago: {
                 'monto':0,
-                'metodo':'',
+                'metodo':null,
             },
             cuotapagada:false,
             estado:0,
@@ -284,17 +287,10 @@ export default {
 
       disabled_pagar(){
         var hab=true
-        console.log('------',this.nuevo_pago.metodo)
-        if (this.nuevo_pago.monto!=0 && this.nuevo_pago.metodo.length==0) {
+        if (this.nuevo_pago.monto!=0 && this.nuevo_pago.metodo != null) {
             hab=false
-            console.log(this.nuevo_pago.monto)
-            console.log('------',typeof(this.nuevo_pago.metodo),this.nuevo_pago.metodo.length)
-            console.log('entra aqui')
-          
         }
-        else{
-          console.log('no cumple')
-        }
+
         return (
           hab
         );
@@ -338,20 +334,22 @@ export default {
             
               }
               else if(this.nuevo_pago.monto > this.cuota_actual.saldo){
+                var diferencia=this.nuevo_pago.monto - this.cuota_actual.saldo
                 // this.$swal('Esta ingresando un importe superior a esta cuota , desea descontar la diferencia de la siguiente cuota?','','warning')
                 this.$swal({
-                  title: 'Vas a pagar mas del importe de esta cuota. Quieres descontar la diferencia a la siguiente cuota?',
-                  showDenyButton: true,
+                  title: 'Vas a pagar '+diferencia+' mas del importe de esta cuota. La diferencia se descontara al saldo de la siguiente cuota',
                   showCancelButton: true,
                   confirmButtonText: 'Confirmar',
+                  cancelButtonText:'Cancelar'
               
                 }).then((result) => {
              
                   if (result.isConfirmed) {
+                    this.excedente=diferencia
 
-                    this.$swal('Pagado!', '', 'success')
+                    this.realizarpago()
                   } else if (result.isDenied) {
-                    this.$swal('Operacion cancelada', '', 'info')
+                    // this.$swal('Operacion cancelada', '', 'info')
 
 
                   }
@@ -385,6 +383,7 @@ export default {
             'id_cuenta':this.id_cuenta,
             'numero_cuota': this.cuota_actual.numero_cuota,
             'id_cuota':this.cuota_actual.id,
+            'excedente':this.excedente,
 
           }
           try{
@@ -395,6 +394,8 @@ export default {
               this.pagos.push(nuevo_pago)
               this.nuevo_pago.metodo=''
               this.nuevo_pago.monto=0
+              this.excedente=0
+              this.cuota_actual=null
 
 
               this.getcuotas()

@@ -292,7 +292,7 @@ export default {
                     let cuotas=this.cuotas
 
                     var habilitar=true
-                    if (total != 0 && cuotas != 0 && this.cliente.dni != '' && this.garante1 != '' && this.garante2 != '' && this.total != 0 && this.productos.length > 0 && this.fecha_venc!='') {
+                    if (total != 0 && cuotas != 0 && this.cliente.dni != '' && this.garante1 != '' && this.total != 0 && this.productos.length > 0 && this.fecha_venc!='') {
                         habilitar=false
                     }
 
