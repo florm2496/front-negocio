@@ -49,6 +49,7 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       stacked="md"
+      empty-text="No hay clientes registrados" 
       show-empty
       small
       @filtered="onFiltered"
@@ -57,7 +58,9 @@
       <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template>
-
+      <template #empty="scope">
+        <h6>{{ scope.emptyText }}</h6>
+      </template>
       <template #cell(actions)="row">
     
 

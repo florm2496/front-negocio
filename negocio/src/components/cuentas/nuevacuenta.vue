@@ -219,6 +219,7 @@ export default {
                 { key: 'producto', label: 'Producto', },
                 { key: 'cantidad', label: 'Cantidad'},
                 { key: 'precio', label: 'Precio'},
+                { key: 'descuento', label: 'Descuento'},
                 { key: 'subtotal', label: 'Subtotal'},
                 { key: 'actions', label: '' }
             ],
@@ -317,24 +318,26 @@ export default {
                 
 
                 const cliente=await APIClientes.getclientebyid(tipo_cliente,tipo)
-                
+                 console.log(tipo_cliente,tipo,cliente)
                 if (cliente.data.length>0){
                     let encontrado=cliente.data[0]
 
-                if (tipo=='garante') {
-                        if (this.garante1 == '') {
-                            this.garante1=encontrado
+                   
+
+                        if (tipo=='garante') {
+                                if (this.garante1 == '') {
+                                    this.garante1=encontrado
+                                    
+                                }
+                                else if (this.garante2 =='' ){
+                                    this.garante2=encontrado
+                                }
+                                
                             
                         }
-                        else if (this.garante2 =='' ){
-                            this.garante2=encontrado
+                        else{
+                            this.cliente=encontrado
                         }
-                         
-                    
-                }
-                else{
-                    this.cliente=encontrado
-                }
                
                    
                 }
@@ -414,7 +417,7 @@ export default {
         let prec=this.producto.precio
         let subt=(parseFloat(cant) * parseFloat(prec)) - desc
         this.subtotal=subt
-        const obj={codigo:this.producto.codigo,producto:this.producto.nombre ,cantidad:cant , precio:prec , subtotal:subt}
+        const obj={codigo:this.producto.codigo,producto:this.producto.nombre ,cantidad:cant , precio:prec ,descuento:desc ,subtotal:subt}
 
         this.productos.push(parseInt(this.producto.codigo))
         this.subtotales.push(parseFloat(subt))
@@ -425,9 +428,6 @@ export default {
 
         this.reset()
         this.calculartotal()
-
-        console.log(this.productos)
-        console.log(this.cantidades)
 
       },
       
@@ -525,7 +525,7 @@ export default {
                 }
         
             }catch(error){
-                console.log('////////////////',error)
+     
                 this.$swal('Ocurrio un error',String(error),'error')
                 
             }

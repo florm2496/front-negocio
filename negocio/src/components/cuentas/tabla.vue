@@ -72,9 +72,9 @@
       <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template>
-        <template #empty="scope">
-      <h3>{{ scope.emptyText }}</h3>
-    </template>
+      <template #empty="scope">
+        <h6>{{ scope.emptyText }}</h6>
+      </template>
    
       <template #cell(actions)="row">
         <!-- <b-button size="sm" @click="deletemodal(row.item, row.index, $event.target)" class="mr-1">

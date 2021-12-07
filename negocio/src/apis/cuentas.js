@@ -100,6 +100,15 @@ class APICuentas{
         
 
     }
+    async refinanciar_cuenta(numerocuenta,cantcuotas,fechavenc){
+        let u=url + 'refinanciarcuenta'
+        const headers= await this.getheaders();
+        let datos = {'cuenta':numerocuenta,'cant_cuotas':cantcuotas,'fecha_venc':fechavenc}
+        const response =await api.post(u,datos,{headers})
+        return response.data;
+        
+
+    }
     async nuevopago(datos){
         let u=url + 'nuevopago'
         const headers= await this.getheaders();

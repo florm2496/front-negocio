@@ -63,11 +63,14 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       stacked="md"
-      show-empty
+      empty-text="No hay clientes registrados" show-empty
       small
       @filtered="onFiltered"
       id="tabla-clientes"
     >
+         <template #empty="scope">
+        <h6>{{ scope.emptyText }}</h6>
+      </template>
       <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
       </template>

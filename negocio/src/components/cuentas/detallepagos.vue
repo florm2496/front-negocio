@@ -2,52 +2,82 @@
 <div>
 <b-container>
   <b-row>
-    <b-col>
+ 
         <b-row>
       
-            <b-col>
-    <b-form-group
-        id="num_cuenta"
-        label="Numero de cuenta"
-        label-for="num_cuenta"
-        
-      >
-       <b-form-input
-          id="num_cuenta"
-          v-model="this.numero_cuenta"
-          type="text"
-          disabled
-        ></b-form-input>
-      </b-form-group>
+          <b-col cols="4">
           <b-form-group
-        id="solicitante"
-        label="Solicitante"
-        label-for="solicitante"
-        
-      >
-       <b-form-input
-          id="solicitante"
-          v-model="cuenta.solicitante"
-          type="text"
-          disabled
-        ></b-form-input>
-      </b-form-group>
-          <b-form-group
-        id="garante"
-        label="Garante"
-        label-for="garante"
-        
-      >
-       <b-form-input
-          id="garante"
-          v-model="cuenta.garante"
-          type="text"
-          disabled
-        ></b-form-input>
-      </b-form-group>
+              id="num_cuenta"
+              label="Numero de cuenta"
+              label-for="num_cuenta"
+              
+            >
+            <b-form-input
+                id="num_cuenta"
+                v-model="this.numero_cuenta"
+                type="text"
+                disabled
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
 
-            </b-col>
-            <b-col>
+        <b-col  cols="4">
+                <b-form-group
+              id="solicitante"
+              label="Solicitante"
+              label-for="solicitante"
+              
+            >
+            <b-form-input
+                id="solicitante"
+                v-model="cuenta.solicitante"
+                type="text"
+                disabled
+              ></b-form-input>
+            </b-form-group>
+
+        </b-col>
+
+
+        <b-col cols="4">
+          
+                <b-form-group
+              id="garante"
+              label="Garante 1"
+              label-for="garante1"
+              
+            >
+            <b-form-input
+                id="garante1"
+                v-model="cuenta.garante1"
+                type="text"
+                disabled
+              ></b-form-input>
+            </b-form-group>
+        </b-col>
+
+      <b-col cols="4">
+                <b-form-group
+              id="garante2"
+              label="Garante 2"
+              label-for="garante2"
+              
+            >
+            <b-form-input
+                id="garante2"
+                v-model="cuenta.garante2"
+                type="text"
+                disabled
+              ></b-form-input>
+            </b-form-group>
+      </b-col>
+
+        
+
+
+
+
+    <b-col cols="4">
           <b-form-group
         id="estado"
         label="Estado"
@@ -60,20 +90,15 @@
           type="text"
           disabled
         ></b-form-input>
+     
+
+
+
       </b-form-group>
-        <b-form-group
-        id="total"
-        label="Total"
-        label-for="total"
-        
-      >
-       <b-form-input
-          id="total"
-          v-model="cuenta.importe"
-          type="text"
-          disabled
-        ></b-form-input>
-      </b-form-group>
+             </b-col>
+
+  <b-col cols="4">
+
     <b-form-group
         id="saldo"
         label="Saldo"
@@ -87,41 +112,44 @@
           disabled
         ></b-form-input>
       </b-form-group>
-            </b-col>
+
+  </b-col>
+
+        
         </b-row>
 
-    </b-col>
+
 
 
     <b-col>
         <b-row>
           <b-col>
    
- <b-button id="show-btn" @click="showModal">Refinanciar cuenta </b-button>
- <b-modal ref="modal-refinanciar" hide-footer title="Refinanciar cuenta">
-      <b-form-group
-     label="Saldo pendiente"
-     >
-         <b-form-input v-model="cuenta.saldo" disabled>
+            <b-button id="show-btn" @click="showModal">Refinanciar cuenta </b-button>
+            <b-modal ref="modal-refinanciar" hide-footer title="Refinanciar cuenta">
+                  <b-form-group
+                label="Saldo pendiente"
+                >
+                    <b-form-input v-model="cuenta.saldo" disabled>
 
-    </b-form-input>
-     </b-form-group>
-     <b-form-group
-     label="Cantidad de cuotas"
-     >
-         <b-form-input v-model="cuotas_refinanciadas" placeholder="Cuotas">
+                </b-form-input>
+                </b-form-group>
+                <b-form-group
+                label="Cantidad de cuotas"
+                >
+                    <b-form-input v-model="datos_refinanciar.cant_cuotas" placeholder="Cuotas">
 
-    </b-form-input>
-     </b-form-group>
-       <b-form-group
-     label="Fecha de vencimiento"
-     type="date"
-     >
-         <b-button v-model="fecha_refinanciada">Fecha refinanciada</b-button>
+                </b-form-input>
+                </b-form-group>
+                  <b-form-group
+                label="Fecha de vencimiento"
+                type="date"
+                >
+                    <b-form-datepicker id="datepicker-refinanciar" v-model="datos_refinanciar.fecha_venc" class="mb-2"  locale="es" placeholder="Seleccione fecha" label-help=""></b-form-datepicker>  
 
-     </b-form-group>
-      <b-button class="mt-2" variant="outline-warning" block @click="refinanciar_cuenta()">Refinanciar</b-button>
-    </b-modal>
+                </b-form-group>
+                  <b-button class="mt-2" variant="outline-warning" block @click="refinanciar_cuenta()" :disabled="disabled_refinanciar">Refinanciar</b-button>
+                </b-modal>
   
           </b-col>
           <b-col>
@@ -135,8 +163,9 @@
 </b-row>
 
 </b-container>
-   <h4>LISTADO DE CUOTAS</h4>
+
       <b-container>
+           <h4>LISTADO DE CUOTAS</h4>
            <b-table  striped hover :items="cuotas" :fields="fields">
 
         <template #cell(name)="row">
@@ -148,13 +177,6 @@
         <b-button size="sm" @click="verpagos(row.item,row.index)"> <b-icon icon="eye-fill"></b-icon> </b-button>
 
       </template>
-<!-- 
-      <template #cell(actions)="row">
-    
-          <b-button size="sm" @click="eliminar(row.item,row.index)"> <b-icon icon="x"></b-icon> </b-button>
-    
-
-      </template> -->
 
            </b-table>
       </b-container>
@@ -245,6 +267,7 @@ export default {
       
                 { key: 'estado', label: 'Estado', sortable: true, class: 'text-center' },
                 { key: 'saldo', label: 'Saldo', sortable: true, class: 'text-center' },
+                { key: 'refinanciada', label: 'Refinanciada', sortable: true, class: 'text-center' },
                 
                 { key: 'pagos', label: 'Pagos', sortable: true, class: 'text-center' },
                  { key: 'pagos', label: 'Pagos' },
@@ -263,6 +286,7 @@ export default {
               'estado':null,
 
             },
+            datos_refinanciar:{'cant_cuotas':0,'fecha_venc':null},
             cuotas: null,
             cuota_actual:null,
             saldo_cuota:0,
@@ -287,7 +311,7 @@ export default {
 
       disabled_pagar(){
         var hab=true
-        if (this.nuevo_pago.monto!=0 && this.nuevo_pago.metodo != null) {
+        if (this.nuevo_pago.monto!=0 && this.nuevo_pago.metodo != null && this.cuota_actual.refinanciada=='NO') {
             hab=false
         }
 
@@ -295,6 +319,17 @@ export default {
           hab
         );
             },
+        
+      disabled_refinanciar(){
+        var hab=true
+        if (this.datos_refinanciar.cant_cuotas!=0) {
+            hab=false
+        }
+
+        return (
+          hab
+        );
+      }
 
 
     },
@@ -346,6 +381,7 @@ export default {
              
                   if (result.isConfirmed) {
                     this.excedente=diferencia
+                    this.nuevo_pago.monto=this.cuota_actual.saldo
 
                     this.realizarpago()
                   } else if (result.isDenied) {
@@ -392,8 +428,7 @@ export default {
               this.$swal('Bien hecho','Nuevo pago agregado','success')
               let nuevo_pago = response.pago
               this.pagos.push(nuevo_pago)
-              this.nuevo_pago.metodo=''
-              this.nuevo_pago.monto=0
+              this.nuevo_pago=null
               this.excedente=0
               this.cuota_actual=null
 
@@ -408,6 +443,49 @@ export default {
           catch(issue){
             
            this.$swal('Error',issue.message,'error')
+          }
+          
+  
+
+        },
+        refinanciar_cuenta(){
+         
+               this.$swal({
+                  title: `Vas a refinanciar un saldo de ${this.cuenta.saldo} en ${this.datos_refinanciar.cant_cuotas} cuotas a partir de ${this.datos_refinanciar.fecha_venc}`,
+                  showCancelButton: true,
+                  confirmButtonText: 'Confirmar',
+                  cancelButtonText:'Cancelar'
+              
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+        
+                    this.confirmar_refinanciacion()
+                  } else if (result.isDenied) {
+                    // this.$swal('Operacion cancelada', '', 'info')
+
+
+                  }
+                })
+
+        },
+          async confirmar_refinanciacion(){
+          
+
+          try{
+        
+            const response = await APICuentas.refinanciar_cuenta(this.numero_cuenta,this.datos_refinanciar.cant_cuotas,this.datos_refinanciar.fecha_venc);
+            if (response.status==200) {
+              this.$swal('Bien hecho','La cuenta ha sido refinanciada','success')
+              this.datos_refinanciar={'cant_cuotas':0,'fecha_venc':''},
+              this.cuota_actual=null
+              this.nuevo_pago=null
+       
+            }
+          }
+          catch(issue){
+            
+           this.$swal('Algo salio mal',issue.message,'error')
           }
           
   
