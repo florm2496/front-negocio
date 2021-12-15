@@ -21,6 +21,12 @@ const routes = [
         component: () => import('../views/ViewClientes.vue')
       },
       {
+        path: 'inicio',
+        name:'inicio',
+        component: () => import('../views/Home.vue')
+      },
+  
+      {
         path: 'editarcliente',
         name:'editarcliente',
         component: () => import('../components/clientes/editarCliente.vue')
@@ -76,10 +82,11 @@ const routes = [
       {
         path: 'utilidades',
         name: 'utilidades',
-        component: () => import('../components/utilidades/utilidades.vue'),
+        component: () => import('../components/base/utilidades.vue'),
         
   
       },
+      
     ]
   },
   {

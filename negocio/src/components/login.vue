@@ -1,6 +1,9 @@
 <template>
   <div>
-      <b-container>
+     <b-row  align-v="center"> 
+       <b-col cols="4"></b-col>
+       <b-col>
+          <b-container  class="container-login">
 
      <b-form  @reset="onReset">
             <b-form-group
@@ -37,6 +40,9 @@
  
       </b-container>
   
+       </b-col>
+        <b-col cols="4"></b-col>
+     </b-row>
   </div>
 </template>
 
@@ -70,7 +76,7 @@ import {APIAuth} from '../apis/auth'
           if ('access' in token){
               localStorage.setItem("access",token.access)
               localStorage.setItem("refresh",token.refresh)
-              this.$router.push('/')
+              this.$router.push('/inicio')
               localStorage.setItem("usuario",this.username)
           }else if('detail' in token){
               this.$swal( "No se puede ingresar al sistema","Usuario o contraseña incorrectos","error",);
@@ -97,20 +103,27 @@ import {APIAuth} from '../apis/auth'
 </script>
 
 <style>
-    .login{
+    /* .login{
        min-height: 100vh;
        display: flex;
        align-items: center;
        justify-content: center;
       
-    }
-    .form{
-         background: blue;
+    } */
+    /* .form{
+         
          width: 500px;
          height: 300px;
          display: flex;
        align-items: center;
        justify-content: center;
+
+    } */
+    .container-login{
+      color: white;
+      background: teal;
+      margin: 60px;
+      padding: 100px;
 
     }
   

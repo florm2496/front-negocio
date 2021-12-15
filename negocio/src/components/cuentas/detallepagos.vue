@@ -1,11 +1,12 @@
 <template>
 <div>
 <b-container>
-  <b-row>
+
  
         <b-row>
       
-          <b-col cols="4">
+          <b-col cols="3">
+
           <b-form-group
               id="num_cuenta"
               label="Numero de cuenta"
@@ -20,8 +21,43 @@
               ></b-form-input>
             </b-form-group>
           </b-col>
+          <b-col cols="3">
 
-        <b-col  cols="4">
+          <b-form-group
+              id="fecha"
+              label="Fecha"
+              label-for="fecha"
+              
+            >
+            <b-form-input
+                id="gecha"
+                v-model="this.cuenta.fecha"
+                type="date"
+                disabled
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+
+         <b-col cols="3">
+
+          <b-form-group
+              id="importe"
+              label="Total"
+              label-for="importe"
+              
+            >
+            <b-form-input
+                id="importe"
+                v-model="this.cuenta.importe"
+                disabled
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col cols="2"><b-button style="margin:10px;" to="cuentas"><b-icon icon="arrow-left-circle-fill"></b-icon></b-button></b-col>
+
+        </b-row>
+   <b-row>
+          <b-col  cols="3">
                 <b-form-group
               id="solicitante"
               label="Solicitante"
@@ -39,7 +75,7 @@
         </b-col>
 
 
-        <b-col cols="4">
+        <b-col cols="3">
           
                 <b-form-group
               id="garante"
@@ -56,7 +92,7 @@
             </b-form-group>
         </b-col>
 
-      <b-col cols="4">
+      <b-col cols="3">
                 <b-form-group
               id="garante2"
               label="Garante 2"
@@ -71,13 +107,16 @@
               ></b-form-input>
             </b-form-group>
       </b-col>
+ </b-row>
+      
 
         
+<b-row>
+  
 
 
 
-
-    <b-col cols="4">
+    <b-col cols="3">
           <b-form-group
         id="estado"
         label="Estado"
@@ -97,7 +136,7 @@
       </b-form-group>
              </b-col>
 
-  <b-col cols="4">
+  <b-col cols="3">
 
     <b-form-group
         id="saldo"
@@ -114,9 +153,13 @@
       </b-form-group>
 
   </b-col>
+  <b-col cols="3">
+          <b-form-group>
+              <b-button id="show-btn" @click="showModal">Refinanciar cuenta </b-button>
 
-        
-        </b-row>
+          </b-form-group>
+          </b-col>
+      </b-row>
 
 
 
@@ -125,7 +168,6 @@
         <b-row>
           <b-col>
    
-            <b-button id="show-btn" @click="showModal">Refinanciar cuenta </b-button>
             <b-modal ref="modal-refinanciar" hide-footer title="Refinanciar cuenta">
                   <b-form-group
                 label="Saldo pendiente"
@@ -148,7 +190,7 @@
                     <b-form-datepicker id="datepicker-refinanciar" v-model="datos_refinanciar.fecha_venc" class="mb-2"  locale="es" placeholder="Seleccione fecha" label-help=""></b-form-datepicker>  
 
                 </b-form-group>
-                  <b-button class="mt-2" variant="outline-warning" block @click="refinanciar_cuenta()" :disabled="disabled_refinanciar">Refinanciar</b-button>
+                  <b-button class="mt-2" variant="outline-primary" block @click="refinanciar_cuenta()" :disabled="disabled_refinanciar">Refinanciar</b-button>
                 </b-modal>
   
           </b-col>
@@ -160,11 +202,10 @@
         </b-row>
 
     </b-col>
-</b-row>
 
 </b-container>
 
-      <b-container>
+      <b-container id="listado-cuotas">
            <h4>LISTADO DE CUOTAS</h4>
            <b-table  striped hover :items="cuotas" :fields="fields">
 
@@ -281,6 +322,7 @@ export default {
             cuenta: {
               'solicitante':'',
               'importe':0,
+              'fecha':null,
               'garante':'',
               'saldo':0,
               'estado':null,
@@ -503,5 +545,8 @@ export default {
 <style>
 .spacing{
    padding: 20px;
+}
+#show-btn,#listado-cuotas{
+  margin-top: 24px;
 }
 </style>

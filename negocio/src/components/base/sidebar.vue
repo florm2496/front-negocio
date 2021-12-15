@@ -7,7 +7,7 @@
                  SISTEMA DE GESTION
                 </div>
             </router-link>
-            <router-link to="/" active-class="active" tag="button" exact class="side-btn">
+            <router-link to="/inicio" active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
                   Panel de control
                 </div>
@@ -28,12 +28,6 @@
                 </div>
             </router-link>
 
-             
-              <router-link to="/ingresos" active-class="active" tag="button" exact class="side-btn">
-                <div class="link-container">
-                    Ingresos
-                </div>
-            </router-link>
 
                 
               <router-link to="/utilidades" active-class="active" tag="button" exact class="side-btn">
@@ -54,7 +48,10 @@
             
        
         </div>
+
+        
     </div>
+    
 </template>
 
 <script>
@@ -153,7 +150,7 @@ export default {
     position: absolute;
     content: "";
     right: 0px;
-    height: 60px;
+    height: 200px;
     width: 60px;
     border-radius: 20%;
     background-color: teal;
