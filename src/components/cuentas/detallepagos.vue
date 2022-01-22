@@ -2,7 +2,16 @@
 <div>
 <b-container>
 
- 
+  <b-row>
+
+    <b-col>
+          <h4>
+            Cuotas y pagos de la cuenta N° {{this.numero_cuenta}}
+          </h4>
+          <br>
+          </b-col>
+  </b-row>
+
         <b-row>
       
           <b-col cols="3">
@@ -24,6 +33,22 @@
           <b-col cols="3">
 
           <b-form-group
+              id="importe"
+              label="Total"
+              label-for="importe"
+              
+            >
+            <b-form-input
+                id="importe"
+                v-model="this.cuenta.importe"
+                disabled
+              ></b-form-input>
+            </b-form-group>
+          </b-col>
+
+         <b-col cols="3">
+            
+          <b-form-group
               id="fecha"
               label="Fecha"
               label-for="fecha"
@@ -36,22 +61,8 @@
                 disabled
               ></b-form-input>
             </b-form-group>
-          </b-col>
 
-         <b-col cols="3">
 
-          <b-form-group
-              id="importe"
-              label="Total"
-              label-for="importe"
-              
-            >
-            <b-form-input
-                id="importe"
-                v-model="this.cuenta.importe"
-                disabled
-              ></b-form-input>
-            </b-form-group>
           </b-col>
           <b-col cols="2"><b-button style="margin:10px;" to="cuentas"><b-icon icon="arrow-left-circle-fill"></b-icon></b-button></b-col>
 
@@ -154,10 +165,10 @@
 
   </b-col>
   <b-col cols="3">
-          <b-form-group>
-              <b-button id="show-btn" @click="showModal">Refinanciar cuenta </b-button>
+        
+              <b-button id="show-btn" variant="danger" @click="showModal">Refinanciar cuenta <b-icon icon="credit-card"></b-icon></b-button>
 
-          </b-form-group>
+  
           </b-col>
       </b-row>
 
@@ -223,9 +234,14 @@
       </b-container>
   
     
-    <b-modal ref="modal-pagos" hide-footer :title="titulo_modal">
+    <b-modal ref="modal-pagos" id="modal-pagos" hide-footer :title="titulo_modal">
+      
+      <template #modal-header="{ close }">
+      <b-button size="sm" variant="outline-danger" @click="close()">
+      <span aria-hidden="true">&times;</span>
+      </b-button> </template>
       <b-container>
-        <h4>Nuevo pago</h4>
+        <h4>Nuevo pago para cuota {{this.cuota_actual.numero_cuota}}</h4>
        <b-row class="spacing">
        
        <b-col>
@@ -249,7 +265,7 @@
       </b-container>
       <div class="d-block text-center">
 
-
+        <h5>Pagos de esta cuota</h5>
     <b-table  striped hover :items="pagos" :fields="fields_pagos">
 
         <template #cell(name)="row">
@@ -312,7 +328,7 @@ export default {
                 
                 { key: 'pagos', label: 'Pagos', sortable: true, class: 'text-center' },
                  { key: 'pagos', label: 'Pagos' },
-                { key: 'actions', label: 'Acciones' }
+                // { key: 'actions', label: 'Acciones' }
 
             ],
             fields_pagos:[{key: 'importe', label: 'Importe', sortable: true, },
@@ -330,7 +346,7 @@ export default {
             },
             datos_refinanciar:{'cant_cuotas':0,'fecha_venc':null},
             cuotas: null,
-            cuota_actual:null,
+            cuota_actual:{},
             saldo_cuota:0,
            
 
@@ -353,7 +369,9 @@ export default {
 
       disabled_pagar(){
         var hab=true
-        if (this.nuevo_pago.monto!=0 && this.nuevo_pago.metodo != null && this.cuota_actual.refinanciada=='NO') {
+
+        console.log('cuota actual',this.cuota_actual)
+        if (this.nuevo_pago.monto!=0 && this.nuevo_pago.metodo != null && this.cuota_actual.refinanciada != 'SI') {
             hab=false
         }
 
@@ -364,7 +382,7 @@ export default {
         
       disabled_refinanciar(){
         var hab=true
-        if (this.datos_refinanciar.cant_cuotas!=0) {
+        if (this.datos_refinanciar.cant_cuotas!=0 && this.datos_refinanciar.fecha_venc != null) {
             hab=false
         }
 
@@ -385,6 +403,7 @@ export default {
 
     },
     methods:{
+ 
       
         async getcuotas(){
             
@@ -470,16 +489,16 @@ export default {
               this.$swal('Bien hecho','Nuevo pago agregado','success')
               let nuevo_pago = response.pago
               this.pagos.push(nuevo_pago)
-              this.nuevo_pago=null
+              this.nuevo_pago={
+                'monto':0,
+                'metodo':null,
+              }
               this.excedente=0
-              this.cuota_actual=null
-
-
+              // this.cuota_actual=null
               this.getcuotas()
-
-
-              
-              
+              this.verpagos(this.cuota_actual)
+              this.$bvModal.hide('modal-pagos')
+    
             }
           }
           catch(issue){
@@ -515,14 +534,17 @@ export default {
           
 
           try{
-        
+            console.log('-------',this.datos_refinanciar)
             const response = await APICuentas.refinanciar_cuenta(this.numero_cuenta,this.datos_refinanciar.cant_cuotas,this.datos_refinanciar.fecha_venc);
+            
             if (response.status==200) {
+               this.getcuotas()
               this.$swal('Bien hecho','La cuenta ha sido refinanciada','success')
               this.datos_refinanciar={'cant_cuotas':0,'fecha_venc':''},
               this.cuota_actual=null
               this.nuevo_pago=null
-       
+
+             
             }
           }
           catch(issue){

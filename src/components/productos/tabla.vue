@@ -44,13 +44,17 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       stacked="md"
-      show-empty
+      empty-text="No hay productos cargados" show-empty
       small
       @filtered="onFiltered"
       id="tabla-productos"
     >
       <template #cell(name)="row">
         {{ row.value.first }} {{ row.value.last }}
+      </template>
+
+      <template #empty="scope">
+        <h6>{{ scope.emptyText }}</h6>
       </template>
 
       <template #cell(actions)="row">
@@ -65,7 +69,7 @@
            <b-button  id="eliminarproducto" class="action" size="sm" @click="deleteswal(row.item)">
          <b-icon icon="trash-fill"></b-icon>
         </b-button>
-             <b-tooltip target="eliminarproducto" triggers="hover">
+             <b-tooltip target="Dar de baja este producto" triggers="hover">
                 Eliminar este producto
               </b-tooltip>
 <!-- 
@@ -126,12 +130,14 @@ export default {
             
         accion:'',
         fields:[
+          { key: 'id', label: 'ID', sortable: true, sortDirection: 'desc' },
           { key: 'nombre', label: 'Nombre', sortable: true, sortDirection: 'desc' },
           { key: 'codigo', label: 'Codigo', sortable: true, class: 'text-center' },
+          { key: 'codigo_ref', label: 'Codigo de ref', sortable: true, class: 'text-center' },
           { key: 'precio', label: 'Precio', sortable: true, class: 'text-center' },
-          { key: 'tipo', label: 'Tipo', sortable: true, class: 'text-center' },
+          { key: 'rubro.nombre', label: 'Rubro', sortable: true, class: 'text-center' },
           // { key: 'stock', label: 'Stock', sortable: true, class: 'text-center' },
-          { key: 'cant_vendida', label: 'Cant vendida', sortable: true, class: 'text-center' },
+          // { key: 'cant_vendida', label: 'Cant vendida', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Acciones' }
 
             ],
@@ -157,6 +163,7 @@ export default {
     
     created(){
         this.getproductos()
+        
     },
     mounted() {
       
@@ -199,18 +206,62 @@ export default {
           return this.objetoproducto
           
       },
-    //   seleccionarproducto(producto){
-        
-    //     this.$emit('elegirproducto',this.getproducto(producto))
-    //     this.hideModal()
-    //   },
+
       cargar(){
-        this.productos()
+        this.getproductos()
         
       },
         abrirmodal(accion,producto){
           this.$refs.modal.showModal(accion,producto);
       },
+
+    async bajaProducto(producto){
+         try{
+   
+           const response=await APIProductos.bajaProducto(producto.codigo)
+           const texto=producto.nombre + '  con codigo  ' + producto.codigo
+              if (response.status==200) {
+                this.$swal(
+                'EXITO!',
+                 texto.toUpperCase() + 'HA SIDO DADO DE BAJA',
+                'success'
+                )
+              
+                }
+                this.cargar()
+              // this.$router.push('productos')
+   
+                     }
+           catch(error){
+               this.$swal(
+                'ERROR ! MUESTRE ESTA VENTANA AL DESARROLLADOR',
+                 error,
+                'error'
+              )
+        }
+            
+      },
+      confirmswal(titulo,texto){
+        return this.$swal({
+            title: titulo.toUpperCase(),
+            text: texto,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'SI, DAR DE BAJA ',
+            cancelButtonText:'CANCELAR'
+          })
+      },
+      deleteswal(producto){
+
+         const titulo=producto.nombre + '  con codigo  ' + producto.codigo
+         const texto="Seguro quieres dar de baja este producto?.Ya no podras verlo en la lista ni usarlo en otras funciones"
+         this.confirmswal(titulo,texto).then((result) => {
+            if (result.isConfirmed) {
+             this.bajaProducto(producto)}
+})
+      }
 
 
     }

@@ -3,3 +3,6 @@ INSTALACIONES:
 npm install --save axios vue-axios
 
 npm install vuejs-datatable
+
+
+VUE_APP_SERVER_URL=http://api.apimitienda.site/

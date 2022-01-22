@@ -51,10 +51,9 @@ class APICuentas{
      
         
     }
-    async cuentasbycliente(cliente,numero_cuenta){
-        let u=url + 'reportescuentas'
-        let params = {'cliente':cliente,
-                        'numero_cuenta':numero_cuenta}
+    async detalleCuentaCliente(dni,numero_cuenta){
+        let u=url + 'detallecuentacliente'
+        let params = {'cliente':dni,'numero_cuenta':numero_cuenta}
         const headers= await this.getheaders();
         
         const cuentas =await api.get(u,{params},{headers})
@@ -87,7 +86,7 @@ class APICuentas{
 
     }
     async deletecuenta(id){
-        const url2=url + id + '/'
+        const url2=url +'lista' + id + '/'
         const headers= await this.getheaders();
         return await api.delete(url2,{headers})
     }

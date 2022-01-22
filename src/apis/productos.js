@@ -29,40 +29,34 @@ class APIProductos{
 
     async getProductos(){
         const headers= await this.getheaders();
-        const productos =await api.get(url,{headers})
+        let url2= url + 'lista/'
+        const productos =await api.get(url2,{headers})
     
         return productos.data;
         
      
         
     }
-    async getProductosActivos(){
-        let url='productosactivos/'
-        const headers= await this.getheaders();
-        const productos =await api.get(url,{headers})
-    
-        return productos.data;
-        
-     
-        
-    }
-    async agregarProducto(producto){
-        const headers= await this.getheaders();
 
-        return await api.post(url,producto,{headers})
+    async agregarProducto(producto){
+    
+        const headers= await this.getheaders();
+        let url2 = url + 'altaproducto'
+
+        return await api.post(url2,producto,{headers})
        
     }
-    async actualizarProducto(id,producto){
+    async actualizarProducto(codigo,producto){
         const headers= await this.getheaders();
-        const url2=url + id + '/'
+        const url2=url + 'actualizarproducto/' + codigo
  
         return await api.put(url2,producto ,{headers})
          
     
 
     }
-    async eliminarProducto(id){
-        const url2=url + id + '/'
+    async bajaProducto(codigo){
+        const url2=url + 'bajaproducto/' + codigo
         const headers= await this.getheaders();
         return await api.delete(url2,{headers})
     }
@@ -77,6 +71,14 @@ class APIProductos{
         let url2 = url +  'nuevosingresos'
         let ingresos = await api.get(url2,{headers})
         return ingresos.data;
+    }
+
+    async getRubros(){
+        const headers= await this.getheaders();
+        let url2 = url +  'rubros/'
+        let rubros = await api.get(url2,{headers})
+        return rubros.data;
+
     }
 }
 

@@ -14,35 +14,45 @@
         </b-row>
         <b-col></b-col>
 
-            <b-col ><label for="">Datos del cliente</label>
+            <b-col ><label for=""><h4>Datos del cliente</h4></label>
  
         <b-row>
             <b-col cols="2" class="mr-auto p-3"><b-button @click="abrirmodalclientes()"><b-icon icon="list"></b-icon></b-button></b-col>
-            <b-col cols="8"  class="mr-auto p-3" ><b-form-input v-model="buscar_solicitante"   placeholder="Busca un solicitante por DNI" ></b-form-input></b-col>
+            <b-col cols="8"  class="mr-auto p-3" ><b-form-input v-model="buscar_solicitante"   placeholder="Solicitante por nombre completo o dni" ></b-form-input></b-col>
             <b-col cols="2" class="mr-auto p-3"><b-button @click="buscarCliente(buscar_solicitante,'solicitante')" :disabled="solicitante_disabled"><b-icon icon="search"></b-icon></b-button></b-col>
            
         </b-row>
         <b-row>
-    <b-col cols="4" class="mr-auto p-3"><label for="">Documento</label></b-col>
-    <b-col cols="auto" class="mr-auto p-3"><b-form-input v-model="cliente.dni" disabled/></b-col>
-       <b-col cols="4" class="mr-auto p-3"><label for="">Nombre</label></b-col>
-    <b-col cols="auto" class="mr-auto p-3"><b-form-input v-model="cliente.nombre" disabled/></b-col> 
-       <b-col cols="4" class="mr-auto p-3"><label for="">Garante</label></b-col>
-    <b-col cols="6" class="mr-auto p-3"><b-form-input v-model="buscar_garante" placeholder="Busca un garante por DNI" /></b-col> 
+    <b-col cols="2" class="mr-auto p-3"><label for="">DNI</label></b-col>
+    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="cliente.dni" disabled/></b-col>
+       <b-col cols="2" class="mr-auto p-3"><label for="">Nombre</label></b-col>
+    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="cliente.nombre" disabled/></b-col> 
+       <b-col cols="2" class="mr-auto p-3"><label for="">Apellido</label></b-col>
+    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="cliente.apellido" disabled/></b-col> 
+         <b-col cols="2" class="mr-auto p-3">Telefono<label for="Telefono"></label></b-col>
+    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="cliente.telefono" disabled/></b-col> 
+
+
+
+       <b-col cols="2" class="mr-auto p-3"><label for="">Garantes</label></b-col>
+    <b-col cols="8" class="mr-auto p-3"><b-form-input v-model="buscar_garante" placeholder="Garante por nombre completo o dni" /></b-col> 
      <b-col cols="2" class="mr-auto p-3">
          <b-button @click="buscarCliente(buscar_garante,'garante')" :disabled="garante_disabled" ><b-icon icon="search"></b-icon></b-button>
          </b-col>
-          <b-col cols="1" class="mr-auto p-3"><label for="">Doc</label></b-col>
-    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante1.dni" disabled/></b-col>
-       <b-col cols="2" class="mr-auto p-3"><label for="">Nombre</label></b-col>
-    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante1.nombre" disabled/></b-col> 
-        <b-col cols="3" class="mr-auto p-3"> <b-button @click="eliminar_garante('1')">X</b-button> </b-col> 
 
-              <b-col cols="1" class="mr-auto p-3"><label for="">Doc</label></b-col>
+
+
+          <b-col cols="1" class="mr-auto p-3"><label for="">DNI</label></b-col>
+    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante1.dni" disabled/></b-col>
+       <b-col cols="2" class="mr-auto p-3"><label for="">Apellido</label></b-col>
+    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="garante1.apellido" disabled/></b-col> 
+        <b-col cols="2" class="mr-auto p-3"> <b-button @click="eliminar_garante('1')">X</b-button> </b-col> 
+
+              <b-col cols="1" class="mr-auto p-3"><label for="">DNI</label></b-col>
     <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante2.dni" disabled/></b-col>
-       <b-col cols="2" class="mr-auto p-3"><label for="">Nombre</label></b-col>
-    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante2.nombre" disabled/></b-col> 
-            <b-col cols="3" class="mr-auto p-3"> <b-button @click="eliminar_garante('2')" >X</b-button> </b-col> 
+       <b-col cols="2" class="mr-auto p-3"><label for="">Apellido</label></b-col>
+    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="garante2.apellido" disabled/></b-col> 
+            <b-col cols="2" class="mr-auto p-3"> <b-button @click="eliminar_garante('2')" >X</b-button> </b-col> 
         </b-row>
             </b-col>
 
@@ -72,7 +82,7 @@
                     <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="cuotas" :disabled="total==0" placeholder="Ingrese la cantidad de cuotas" required></b-form-input></b-col>
                
                     <b-col cols="2"  class="mr-auto p-3"><label for="">Importe</label></b-col>
-                    <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="importecuotas" disabled></b-form-input></b-col>
+                    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="importecuotas" disabled></b-form-input></b-col>
                     <!-- <b-col cols="1"  class="mr-auto p-3" ><b-button @click="importecuotas()" ><b-icon icon="calculator"></b-icon></b-button></b-col> -->
 
                 </b-row>
@@ -81,23 +91,24 @@
                     <b-col cols="2"  class="mr-auto p-3"><label for="">Anticipo</label></b-col>
                     <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="anticipo"></b-form-input></b-col>
 
-                   
+                              <b-col cols="2"  class="mr-auto p-3"><label for="">Descuento</label></b-col>
+                    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="descuento"></b-form-input></b-col> 
                
-                    <b-col cols="3"  class="mr-auto p-3"><label for="">Metodo de pago</label></b-col>
-                    <b-col cols="4" class="mr-auto p-3"><v-select id="metodo_id" v-model="metodo" :options="metodos"></v-select>
-            </b-col>
+                 
                     <!-- <b-col cols="5" class="mr-auto p-3"><b-form-input v-model="fecha_venc" type="date"></b-form-input></b-col> -->
-                
+                   <b-col cols="6"  class="mr-auto p-3"><label for="">Metodo de pago</label></b-col>
+                    <b-col cols="6" class="mr-auto p-3"><v-select id="metodo_id" v-model="metodo" :options="metodos"></v-select>
 
+            </b-col>
                 </b-row>
                    <b-row>
-                    <!-- <b-col cols="2"  class="mr-auto p-3"><label for="">Descuento</label></b-col> -->
-                    <!-- <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="descuento"></b-form-input></b-col> -->
+         
                     <b-col cols="6"  class="mr-auto p-3"><label for="">Fecha de vencimiento</label></b-col>
                     <b-col cols="6" class="mr-auto p-3"><b-form-datepicker id="example-datepicker" v-model="fecha_venc" class="mb-2"  locale="es" placeholder="Seleccione fecha" label-help=""></b-form-datepicker>  </b-col>
-                   </b-row>
+                 
 
                 </b-row>
+                     </b-row>
              </b-container>
               
                 <b-row>
@@ -111,8 +122,9 @@
             </b-col>
     </b-row>
     <b-row>
-
-        <b-col cols="2"  class="mr-auto p-3"> <label for="">Detalles de productos</label></b-col>
+          <b-col cols="10"  class="mr-auto p-3"> <label for=""><h4>Detalles de productos</h4></label></b-col>
+            <b-col cols="2"  class="mr-auto p-3"> <label for=""></label></b-col>
+        <b-col cols="2"  class="mr-auto p-3"> <label for="">Producto</label></b-col>
          <b-col cols="2"   class="mr-auto p-3"> <label for="">Precio</label></b-col>
          <b-col cols="2"  class="mr-auto p-3"> <label for="">Cantidad</label></b-col>
         <b-col cols="2"  class="mr-auto p-3"> <label for="">Descuento</label></b-col>
@@ -238,6 +250,12 @@ export default {
 
 
     },
+    watch :{
+        total : function(val){
+            console.log('detecta cambios',val)
+        }
+
+    },
       computed: {
                 fileSizeValidation() {
                     var estado = true
@@ -266,27 +284,29 @@ export default {
                     estado
                 );
                 },
-                importecuotas(){
-                    var importe=0
-                    if (this.total > 0 && this.cuotas > 0) {
-                        importe=this.total/parseInt(this.cuotas)
-                    }
-                    return (
-                        importe
-                    );
-                    },
-
+      
                 totaldesc(){
                     var total= this.total
                     if ((this.descuento >= 0 && this.descuento <= total) && (this.anticipo >= 0 && this.anticipo <= total)){
                         
                             total=this.total - this.descuento - this.anticipo
+                            //this.total=total
                     }
                         return (
                             total
                         );
                     
                 },
+                importecuotas(){
+                    var importe=0
+                    if (this.total > 0 && this.cuotas > 0) {
+                        importe=(this.total - this.anticipo - this.descuento)/parseInt(this.cuotas)
+                    }
+                    return (
+                        importe
+                    );
+                    },
+
 
                 vender_disabled(){
                     let total= this.total
@@ -312,15 +332,15 @@ export default {
             }
 
         },
-        async buscarCliente(tipo_cliente,tipo){
+        async buscarCliente(cliente,tipo){
             try{
                 this.loading=true
                 
 
-                const cliente=await APIClientes.getclientebyid(tipo_cliente,tipo)
-                 console.log(tipo_cliente,tipo,cliente)
-                if (cliente.data.length>0){
-                    let encontrado=cliente.data[0]
+                const clienteS=await APIClientes.getClienteCuenta(cliente)
+
+                if (clienteS.data.length>0){
+                    let encontrado=clienteS.data[0]
 
                    
 
@@ -342,8 +362,8 @@ export default {
                    
                 }
                 else{
-                    let mensaje= tipo + ' no encontrado'
-                    this.$swal(mensaje,'warning')
+                    let mensaje= 'Cliente' + ' no encontrado'
+                    this.$swal(mensaje,'Buscar por nombre completo ,por apellido o dni','warning')
                     this.cliente=''
                     
                     
@@ -490,13 +510,17 @@ export default {
     vender(){
         var datos={}
         var fv=this.verificar_fecha()
-        
+
+        console.log(this.totaldesc)
+        console.log(this.anticipo)
+
         if (fv == true) {
             datos={'solicitante':this.cliente.dni,
                     'garante1':this.garante1.dni,
                     'garante2':this.garante2.dni,
-                    'importe':this.total,
-                    'anticipo':parseFloat(this.anticipo),
+                    'importe':this.totaldesc,
+                    'anticipo':this.anticipo,
+                    'descuento':this.descuento,
                     'metodo_pago':this.metodo,
                     'cant_cuotas':this.cuotas,
                     'importe_cuota':parseFloat(this.importecuotas),

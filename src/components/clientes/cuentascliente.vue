@@ -38,7 +38,7 @@
 
       <b-col sm="5" md="6" class="my-1">
         <b-form-group
-          label="Clientes por pagina"
+          label="Cuentas por pagina"
           label-for="per-page-select"
           label-cols-sm="6"
           label-cols-md="4"
@@ -69,7 +69,7 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       stacked="md"
-      show-empty
+      empty-text="Este cliente no tiene cuentas aun" show-empty
       small
       @filtered="onFiltered"
       id="tabla-clientes"

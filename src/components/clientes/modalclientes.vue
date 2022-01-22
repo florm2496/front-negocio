@@ -1,12 +1,22 @@
 <template>
   <div>
-  <b-container>
-      <b-row align-h="between">
-        <b-col cols="4">   <h3>Numero de cliente {{this.cliente.numero_cliente}}</h3></b-col>
-        <b-col cols="2">  <b-button style="margin:10px;" to="clientes"><b-icon icon="arrow-left-circle-fill"></b-icon></b-button></b-col>
-        </b-row>
-           <form ref="form" @submit.stop.prevent="this.handleSubmit">
-
+    <b-modal
+      id="modal-prevent-closing"
+      ref="modal"
+      :title="this.titulo"
+      ok-title="Guardar"
+      cancel-title="Cancelar"
+      @show="this.resetModal"
+      @hidden="this.resetModal"
+      @ok="this.handleOk"
+      size="lg"   
+    >
+      <template #modal-header="{ close }">
+      <b-button size="sm" variant="outline-danger" @click="close()">
+      <span aria-hidden="true">&times;</span>
+      </b-button> </template>
+      <form ref="form" @submit.stop.prevent="this.handleSubmit">
+   
 <b-row>
 <b-col>
     <b-form-group
@@ -39,20 +49,14 @@
             required
           ></b-form-input>
         </b-form-group>
-            <b-form-group
+
+                <b-form-group
           label="Fecha de nacimiento"
           label-for="fc_id"
-          invalid-feedback="Ingrese fecha de nacimiento"
-          :state="fcState"
         >
-          <b-form-input
-            id="fc_id"
-            v-model="cliente.fecha_nacimiento"
-            :state="fcState"
-            type="date"
-            required
-          ></b-form-input> 
+      <datepicker v-model="cliente.fecha_nacimiento" input-class="input-clase"  :language="es" @closed="fechaSeleccionada" placeholder="Seleccione una fecha" ></datepicker>
           </b-form-group>
+ 
 
 
             <b-form-group
@@ -90,13 +94,12 @@
                   <b-form-group
             label="Boleta"
           label-for="boleta_id"
-          invalid-feedback="Debe ingresar la boleta"
-          :state="boletaState"
+
           >
                <b-form-input
             id="boleta_id"
             v-model="cliente.boleta_sueldo"
-            :state="boletaState"
+  
             type="number"
 
           >
@@ -153,13 +156,12 @@
       <b-form-group
           label="Telefono"
           label-for="telefono_id"
-          invalid-feedback="Debe ingresar el telefono"
-          :state="telefonoState"
+
         >
           <b-form-input
             id="telefono_id"
             v-model="cliente.telefono"
-            :state="telefonoState"
+    
             type="number"
             required
           ></b-form-input>
@@ -170,13 +172,12 @@
        <b-form-group
            label="Edad"
           label-for="edad_id"
-          invalid-feedback="Debe ingresar la edad"
-          :state="edadState"
+
           >
                <b-form-input
             id="edad_id"
             v-model="cliente.edad"
-            :state="edadState"
+    
             type="number"
             required
           >
@@ -202,13 +203,12 @@
        <b-form-group
            label="Lugar de trabajo"
           label-for="lugar_trabajo_id"
-          invalid-feedback="Ingrese el lugar de trabajo"
-          :state="lugar_trabajoState"
+
           >
                <b-form-input
             id="lugar_trabajo_id"
             v-model="cliente.lugar_trabajo"
-            :state="lugar_trabajoState"
+     
            
             required
           >
@@ -218,13 +218,12 @@
             <b-form-group
            label="Sueldo"
           label-for="sueldo_id"
-          invalid-feedback="Debe ingresar el sueldo"
-          :state="sueldoState"
+
           >
                <b-form-input
             id="sueldo_id"
             v-model="cliente.sueldo"
-            :state="sueldoState"
+       
             type="number"
             required
           >
@@ -232,66 +231,73 @@
         </b-form-group>
         
         <b-form-group>
-     <b-form-checkbox
-      id="garante_id"
-      v-model="cliente.garante"
-      status="garante"
-      name="garante"
-      value=true
-      unchecked-value=false
-    >
-      Garante
-    </b-form-checkbox>
-        </b-form-group>
- 
-    <b-form-group>
-          <b-form-checkbox
-          id="solicitante_id"
-          v-model="cliente.solicitante"
-          status="solicitante"
-          name="solicitante"
-          value=true
-          unchecked-value=false
-        >
-          Solicitante
-        </b-form-checkbox>
         
     </b-form-group>
       
 
 </b-col>
 </b-row>
+       
 
-      <b-alert variant="warning" :show="alert">Complete todos los campos</b-alert>
+    
 
-         <b-row align-v="center">
-        <b-col ><b-button style="margin:10px;" @click="deleteswal()" ><b-icon icon="trash-fill"></b-icon></b-button>  </b-col>
-        <b-col>   <b-button @click="modificarcliente()">Editar cliente</b-button></b-col>
-        </b-row>
+
+
+      <b-alert variant="warning" :show="alert">Debe completar nombre apellido y domicilio</b-alert>
       </form>
-
-  </b-container>
- 
+    </b-modal>
   </div>
 </template>
 
 <script>
 
 import APIClientes from '../../apis/clientes'
+
+import Datepicker from 'vuejs-datepicker';
+
+import { es } from 'vuejs-datepicker/dist/locale';
+
+import moment from 'moment';
+
+
   export default {
-    name:'EditarCliente',
+    name:'ModalCliente',
+
+    components:{
+      Datepicker,
+    
+    },
    
     data() {
       return {
          doms:[],
          domicilio: {
             localidad:'',
-            codigo_postal:4172,
+            codigo_postal:'',
             direccion:'',
 
           },
-        cliente:null,
-        dnicliente:null,
+        cliente:{
+          nombre:'',
+          apellido:'',
+          dni:'',
+          
+          telefono:'',
+          sueldo:'',
+          fecha_nacimiento:'',
+          edad:'',
+          boleta_sueldo:'',
+          lugar_trabajo:'',
+          tipo:'',
+          garante:false,
+          solicitante:false,
+         
+          email:'',
+          referente:'',
+          direccion:''
+
+        },
+        es:es,
        
         activo:'',
         
@@ -304,60 +310,62 @@ import APIClientes from '../../apis/clientes'
         dniState:null,
         
         direccionState:null,
-        
-        telefonoState:null,
-        sueldoState:null,
-        boletaState:null,
-        fcState:null,
+    
         cpState:null,
-        edadState:null,
+ 
         localidadState:null,
-        referenteState:null,
-        lugar_trabajoState:null,
-        emailState:null,
+     
         response:null,
         alert:false,
         accion:'',
        
       }
     },
-   created(){
-    this.dnicliente=this.$route.query.dni
-    console.log(this.dnicliente)
-    },
-    mounted(){
-    this.getcliente()
-    
-  },
     methods: {
-    async getcliente(){
-   
-      const cliente= await APIClientes.getclientebyid(this.dnicliente,null)
-
-      this.cliente = cliente.data[0]
-      this.domicilio=this.cliente.domicilio
-
-    },
       checkFormValidity() {
-        const valid = this.$refs.form.checkValidity()
+        var valid = false
+        if ((typeof(this.cliente.apellido) != 'undefined' || this.cliente.apellido != '')
+            && ( typeof(this.cliente.nombre) != 'undefined' ||  this.cliente.nombre != '') 
+            && (typeof(this.cliente.dni) != 'undefined'  || this.cliente.dni != '' ) 
+            && (typeof(this.domicilio.localidad) !='undefined' || this.domicilio.localidad != '' )
+            && (typeof(this.domicilio.codigo_postal) != 'undefined' || this.domicilio.codigo_postal !='') 
+            && (typeof(this.domicilio.direccion!= 'undefined') || this.domicilio.direccion!='' )) {
+
+                    valid = true
+          
+        }
+        console.log(this.domicilio.codigo_postal ,typeof(this.domicilio.codigo_postal ))
+        console.log(this.domicilio.direccion,typeof(this.domicilio.direccion))
+        console.log(this.domicilio.localidad,typeof(this.domicilio.localidad))
+        console.log(this.cliente.apellido,typeof(this.cliente.apellido))
+        console.log(this.cliente.nombre,typeof(this.cliente.nombre))
+        console.log(this.cliente.dni,typeof(this.cliente.dni))
+  
         if (valid==false) {
             this.alert=true
         }
+      console.log(valid)
+
         return valid
 
+      },
+      fechaSeleccionada(){
+        let date = this.cliente.fecha_nacimiento
+        let date2= moment(date).format('YYYY-MM-DD')
+        this.cliente.fecha_nacimiento=date2
       },
 
       resetModal() {
         this.nombre = ''
         this.nombreState = null
         this.telefono = ''
-        this.telefonoState = null
+
         this.apellido = ''
         this.apellidoSTtae = null
         this.sueldo=''
-        this.sueldoState=null
+
         this.boleta=''
-        this.boletaState=null
+
         this.dni =''
         this.dniState = null
         this.direccionState=null
@@ -368,15 +376,98 @@ import APIClientes from '../../apis/clientes'
 
       },
       
-  
+      handleOk(bvModalEvt) {
+       
+        bvModalEvt.preventDefault()
+       
+        this.handleSubmit()
+      },
+    cerrarModal(){
+          this.$bvModal.hide('modal-prevent-closing')
+     },
+      handleSubmit() {
+       
+        if (!this.checkFormValidity()) {
+          return
+        }
+
+        if (this.accion=='crear'){
+          this.crearcliente()
+        }
+        else if(this.accion=='modificar'){
+          this.modificarcliente()
  
+        }
+    
+        
+        this.$nextTick(() => {
+          
+
+          //AQUI DEBERIA EMITIR UN EVENTO HACIA EL COMPONENTE PADRE PARA ACTUALIZAR LOS DATOS
+
+        })
+      },
+      recargartabla(){
+          this.$emit("avisar")
+
+      },
+        showModal(accion,cliente) {
+        this.$refs['modal'].show()
+        if (accion=='modificar') {
+          this.cliente=cliente
+          this.domicilio=this.cliente.domicilio
+          this.titulo='Modificar cliente'
+        } else if (accion=='crear') {
+          this.cliente={}
+          this.titulo='Nuevo cliente'
+          
+        }
+        this.accion=accion
+      },
+
+        async crearcliente(){
+          
+          
+        const cliente={
+            'nombre':this.cliente.nombre,
+            'apellido':this.cliente.apellido,
+            'dni':parseInt(this.cliente.dni),
+            'boleta_sueldo':parseInt(this.cliente.boleta_sueldo),
+            'telefono':parseInt(this.cliente.telefono),
+            'sueldo':parseFloat(this.cliente.sueldo),
+  
+            'referente':this.cliente.referente,
+            'domicilio': this.domicilio,
+        
+            'lugar_trabajo':this.cliente.lugar_trabajo,
+            'fecha_nacimiento':this.cliente.fecha_nacimiento,
+            'edad':this.cliente.edad,
+            'email':this.cliente.email,
+
+        }
+        try{
+            const response=await APIClientes.addcliente(cliente)
+            if (response.status==201) {
+                this.$swal('En buena hora!','Un nuevo cliente fue agregado','success');
+                this.cerrarModal();
+                this.$emit('recargar')
+
+            }
+        }
+        catch(error){
+          console.log(error)
+            this.$swal('Ups!No se pudo crear el cliente','Recuerde que no pueden existir dos clientes con el mismo dni en la base de datos','warning');
+            
+        }
+      
+    },
      async modificarcliente(){
         try{
-            let cliente =this.cliente
-            cliente.domicilio=this.domicilio
-           const response=await APIClientes.updatecliente(this.cliente.id,cliente)
+           const response=await APIClientes.updatecliente(this.cliente.id,this.cliente)
               if (response.status==200) {
                 this.$swal('Bien hecho','El cliente fue modificado con exito','success');
+                this.cerrarModal();
+                this.$emit('recargar')
 
             }
         }
@@ -385,58 +476,18 @@ import APIClientes from '../../apis/clientes'
         }
             
       },
-    async deletecliente(){
-         try{
-           const response=await APIClientes.deletecliente(this.cliente.id)
-           const texto=this.cliente.nombre + ' ' + this.cliente.apellido
-              if (response.status==200) {
-                this.$swal(
-                'BORRADO!',
-                 texto.toUpperCase() + 'HA SIDO BORRADO',
-                'success'
-              )
-              
-            }
-            else if(response.status==204){
-              this.$swal(
-                'BORRADO!',
-                 texto.toUpperCase() + ' HA SIDO BORRADO',
-                'success'
-              )
-              this.$router.push('clientes')
-              
-            }
-        }
-           catch(error){
-               this.$swal(
-                'ERROR ! MUESTRE ESTA VENTANA AL DESARROLLADOR',
-                 error,
-                'error'
-              )
-        }
-            
-      },
-      confirmswal(titulo,texto){
-        return this.$swal({
-            title: titulo.toUpperCase(),
-            text: texto,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'SI, BORRAR',
-            cancelButtonText:'CANCELAR'
-          })
-      },
-      deleteswal(cliente){
-         const titulo=cliente.nombre + ' ' + cliente.apellido
-         const texto="Seguro quieres borrar a este cliente ?"
-         this.confirmswal(titulo,texto).then((result) => {
-            if (result.isConfirmed) {
-             this.deletecliente(cliente)}
-})
-      }
       },
      
   }
 </script>
+<style>
+.vdp-datepicker * {
+    box-sizing: border-box;
+     width: 100%;
+    background-color: #fff;
+    background-clip: padding-box;
+    padding: 0.375rem 0.75rem;
+        border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+</style>

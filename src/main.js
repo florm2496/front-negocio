@@ -33,6 +33,8 @@ Vue.use(VueSearch)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 Vue.use(VueAxios, axios)
+
+Vue.use(require('vue-moment'));
 //Vue.use(VueSessionStorage)
 
 Vue.component('v-select', vSelect)

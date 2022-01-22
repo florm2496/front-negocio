@@ -80,7 +80,7 @@
         <!-- <b-button size="sm" @click="deletemodal(row.item, row.index, $event.target)" class="mr-1">
          Eliminar
         </b-button> -->
-   
+<!--    
         <b-button id="editarcuenta"  class="action" size="sm" @click="abrirmodal('modificar',getcuenta(row.item))">    <b-icon icon="tag-fill"></b-icon></b-button>
             <b-tooltip target="editarcuenta" triggers="hover">
                 Editar esta cuenta
@@ -90,7 +90,7 @@
         </b-button>
              <b-tooltip target="eliminarcuenta" triggers="hover">
                 Eliminar esta cuenta
-              </b-tooltip>
+              </b-tooltip> -->
 
 
         <b-button id="detallecuenta" class="action" size="sm" @click="detallecuenta(row.item)">    <b-icon icon="folder2"></b-icon></b-button>
@@ -164,11 +164,10 @@ import APICuentas from '../../apis/cuentas'
             
         accion:'',
         fields:[
-          { key: 'numero_cuenta', label: 'Numero de cuenta', sortable: true, class: 'text-center' },
-          { key: 'solicitante_nombre', label: 'Solicitante', sortable: true, sortDirection: 'desc' },
-          { key: 'solicitante_dni', label: 'DNI solicitante', sortable: true, sortDirection: 'desc' },
+          { key: 'numero_cuenta', label: 'N° de cuenta', sortable: true, class: 'text-center' },
+          { key: 'solicitante', label: 'Solicitante', sortable: true, sortDirection: 'desc' },
+          { key: 'solicitante_dni', label: 'DNI', sortable: true, sortDirection: 'desc' },
           { key: 'garante1', label: 'Garante 1', sortable: true, class: 'text-center' },
-          { key: 'garante2', label: 'Garante 2', sortable: true, class: 'text-center' },
           { key: 'importe', label: 'Importe', sortable: true, class: 'text-center' },
           { key: 'fecha', label: 'Fecha', sortable: true, class: 'text-center' },
           
@@ -199,7 +198,7 @@ import APICuentas from '../../apis/cuentas'
       },
        detallecuenta(cuenta){
         
-        this.$router.push({path :'/detallecuenta',query:{num_cuenta:cuenta.numero_cuenta ,solicitante_dni:cuenta.solicitante_dni}});
+        this.$router.push({path :'/detallecuenta',query:{numcuenta:cuenta.numero_cuenta ,solicitante:cuenta.solicitante_dni}});
       },
 
 
