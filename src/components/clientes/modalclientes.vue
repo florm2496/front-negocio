@@ -24,6 +24,7 @@
           label-for="nombre_id"
           invalid-feedback="Debe ingresar el nombre"
           :state="nombreState"
+          class="obligatorio"
         >
           <b-form-input
             id="nombre_id"
@@ -40,6 +41,7 @@
           label-for="dni_id"
           invalid-feedback="Debe ingresar el DNI"
           :state="dniState"
+          class="obligatorio"
         >
           <b-form-input
             id="dni_id"
@@ -49,7 +51,17 @@
             required
           ></b-form-input>
         </b-form-group>
-
+ <b-form-group
+           label="Email"
+          label-for="email_id"
+    
+          >
+               <b-form-input
+            id="email_id"
+            v-model="cliente.email"
+          >
+          </b-form-input>
+        </b-form-group>
                 <b-form-group
           label="Fecha de nacimiento"
           label-for="fc_id"
@@ -64,6 +76,7 @@
           label-for="direccion_id"
           invalid-feedback="Debe ingresar la direccion"
           :state="direccionState"
+          class="obligatorio"
         >
           <b-form-input
             id="direccion_id"
@@ -79,6 +92,7 @@
           label-for="localidad_id"
           invalid-feedback="Debe ingresar la localidad"
           :state="localidadState"
+          class="obligatorio"
         >
           <b-form-input
             id="localidas_id"
@@ -89,51 +103,27 @@
           ></b-form-input> 
           </b-form-group>
 
-  
-
-                  <b-form-group
-            label="Boleta"
-          label-for="boleta_id"
-
+   <b-form-group
+           label="Codigo postal"
+          label-for="codigo_postal_id"
+          invalid-feedback="Ingrese el codigo postal"
+          :state="cpState"
+          class="obligatorio"
           >
                <b-form-input
-            id="boleta_id"
-            v-model="cliente.boleta_sueldo"
-  
+            id="codigo_postal_id"
+            v-model="domicilio.codigo_postal"
+            :state="cpState"
             type="number"
-
+            required
           >
           </b-form-input>
-         
-        </b-form-group>
-        
-                  <b-form-group
-            label="Referente"
-          label-for="referente_id"
-        
-          >
-               <b-form-input
-            id="referente_id"
-            v-model="cliente.referente"
+        </b-form-group>      
 
-          >
-          </b-form-input>
-         
-        </b-form-group>
 
 
         
-            <b-form-group
-           label="Email"
-          label-for="email_id"
-    
-          >
-               <b-form-input
-            id="email_id"
-            v-model="cliente.email"
-          >
-          </b-form-input>
-        </b-form-group>
+           
 </b-col>
 <b-col>
 
@@ -144,6 +134,7 @@
           label-for="apellido_id"
           invalid-feedback="Debe ingresar el apellido"
           :state="apellidoState"
+          class="obligatorio"
         >
           <b-form-input
             id="apellido_id"
@@ -185,21 +176,7 @@
         </b-form-group>
 
         
-       <b-form-group
-           label="Codigo postal"
-          label-for="codigo_postal_id"
-          invalid-feedback="Ingrese el codigo postal"
-          :state="cpState"
-          >
-               <b-form-input
-            id="codigo_postal_id"
-            v-model="domicilio.codigo_postal"
-            :state="cpState"
-            type="number"
-            required
-          >
-          </b-form-input>
-        </b-form-group>      
+      
        <b-form-group
            label="Lugar de trabajo"
           label-for="lugar_trabajo_id"
@@ -230,9 +207,38 @@
           </b-form-input>
         </b-form-group>
         
-        <b-form-group>
+    
+           <b-form-group
+            label="Boleta"
+          label-for="boleta_id"
+
+          >
+               <b-form-input
+            id="boleta_id"
+            v-model="cliente.boleta_sueldo"
+  
+            type="number"
+
+          >
+          </b-form-input>
+         
+        </b-form-group>
         
-    </b-form-group>
+               
+                  <b-form-group
+            label="Referente"
+          label-for="referente_id"
+        
+          >
+               <b-form-input
+            id="referente_id"
+            v-model="cliente.referente"
+
+          >
+          </b-form-input>
+         
+        </b-form-group>
+  
       
 
 </b-col>
@@ -243,7 +249,7 @@
 
 
 
-      <b-alert variant="warning" :show="alert">Debe completar nombre apellido y domicilio</b-alert>
+      <b-alert variant="warning" :show="alert">Debe completar Nombre , Apellido  , DNI y Domicilio (localidad, direccion y codigo postal)</b-alert>
       </form>
     </b-modal>
   </div>
@@ -262,6 +268,10 @@ import moment from 'moment';
 
   export default {
     name:'ModalCliente',
+    metaInfo: {
+      title: 'Hogareña',
+      icon:null,
+    },
 
     components:{
       Datepicker,
@@ -272,9 +282,9 @@ import moment from 'moment';
       return {
          doms:[],
          domicilio: {
-            localidad:'',
-            codigo_postal:'',
-            direccion:'',
+            localidad:null,
+            codigo_postal:null,
+            direccion:null,
 
           },
         cliente:{
@@ -324,12 +334,12 @@ import moment from 'moment';
     methods: {
       checkFormValidity() {
         var valid = false
-        if ((typeof(this.cliente.apellido) != 'undefined' || this.cliente.apellido != '')
-            && ( typeof(this.cliente.nombre) != 'undefined' ||  this.cliente.nombre != '') 
-            && (typeof(this.cliente.dni) != 'undefined'  || this.cliente.dni != '' ) 
-            && (typeof(this.domicilio.localidad) !='undefined' || this.domicilio.localidad != '' )
-            && (typeof(this.domicilio.codigo_postal) != 'undefined' || this.domicilio.codigo_postal !='') 
-            && (typeof(this.domicilio.direccion!= 'undefined') || this.domicilio.direccion!='' )) {
+        if ((typeof(this.cliente.apellido) != 'undefined' && this.cliente.apellido != '' && this.cliente.apellido != null )
+            && ( typeof(this.cliente.nombre) != 'undefined' &&  this.cliente.nombre != '' &&  this.cliente.nombre != null ) 
+            && (typeof(this.cliente.dni) != 'undefined'  && this.cliente.dni != ''  && this.cliente.dni != null ) 
+            && (typeof(this.domicilio.localidad) !='undefined' && this.domicilio.localidad != '' && this.domicilio.localidad != null)
+            && (typeof(this.domicilio.codigo_postal) != 'undefined' && this.domicilio.codigo_postal !='' && this.domicilio.codigo_postal != null) 
+            && (typeof(this.domicilio.direccion!= 'undefined') && this.domicilio.direccion!='' && this.domicilio.direccion!= null )) {
 
                     valid = true
           
@@ -489,5 +499,10 @@ import moment from 'moment';
     padding: 0.375rem 0.75rem;
         border-radius: 0.25rem;
     border: 1px solid #ced4da;
+}
+.obligatorio{
+
+  color: red;
+
 }
 </style>

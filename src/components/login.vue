@@ -5,6 +5,9 @@
        <b-col>
           <b-container  class="container-login">
 
+           <b-col > <h5>La Hogareña</h5></b-col>
+           <br>
+
      <b-form  @reset="onReset">
             <b-form-group
         id="input-group-username"
@@ -34,7 +37,7 @@
           placeholder="Ingresa tu contraseña"
           required
         ></b-form-input>
-        <b-button @click="login">Ingresar</b-button>
+        <b-button id="boton-ingresar" @click="login">Ingresar</b-button>
       </b-form-group>
      </b-form>
  
@@ -50,6 +53,9 @@
 import {APIAuth} from '../apis/auth'
   export default {
     name:"Login",
+       metaInfo: {
+      title: 'Hogareña'
+    },
     data() {
       return {
        
@@ -103,28 +109,19 @@ import {APIAuth} from '../apis/auth'
 </script>
 
 <style>
-    /* .login{
-       min-height: 100vh;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-      
-    } */
-    /* .form{
-         
-         width: 500px;
-         height: 300px;
-         display: flex;
-       align-items: center;
-       justify-content: center;
 
-    } */
     .container-login{
       color: white;
       background: teal;
-      margin: 60px;
-      padding: 100px;
+      /* margin: 60px;
+       */
+       padding: 50px;
+       margin-top: 150px;
 
+    }
+    #boton-ingresar{
+      margin-left: 40%;
+      margin-top: 20px;
     }
   
 </style>

@@ -18,6 +18,7 @@
     "vue-axios": "^3.2.4",
     "vue-date-pick": "^1.4.1",
     "vue-input-search": "0.0.20",
+    "vue-meta": "^2.4.0",
     "vue-moment": "^4.1.0",
     "vue-router": "^3.2.0",
     "vue-select": "^3.13.0",

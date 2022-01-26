@@ -22,7 +22,12 @@ import 'vue-select/dist/vue-select.css';
 // Install BootstrapVue
 //import VueSessionStorage from "vue-sessionstorage"; 
 import vSelect from 'vue-select'
+import VueMeta from 'vue-meta';
 
+
+
+
+Vue.use(VueMeta);
 
 
 

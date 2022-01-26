@@ -115,6 +115,7 @@ export default {
         accion:'',
         fields:[
           { key: 'codigo', label: 'Codigo', sortable: true, class: 'text-center' },
+          { key: 'codigo_ref', label: 'Cod. referencia', sortable: true, class: 'text-center' },
           { key: 'nombre', label: 'Nombre', sortable: true, sortDirection: 'desc' },
           { key: 'precio', label: 'Precio', sortable: true, class: 'text-center' },
   

@@ -4,7 +4,7 @@
         <div class="menu-items">
                  <router-link to="#" active-class="active" tag="button" exact class="side-btn">
                 <div class="link-container">
-                 SISTEMA DE GESTION
+                HOGAREÑA
                 </div>
             </router-link>
             <router-link to="/inicio" active-class="active" tag="button" exact class="side-btn">
@@ -90,7 +90,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-    margin-left: 6px;
+
 }
 
 .menu-items > * {
@@ -133,7 +133,7 @@ export default {
     content: "";
     right: 0;
     height: 30px;
-    width: 30px;
+    width: 50px;
     background-color: white;
 }
 

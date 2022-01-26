@@ -23,14 +23,18 @@
            
         </b-row>
         <b-row>
-    <b-col cols="2" class="mr-auto p-3"><label for="">DNI</label></b-col>
-    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="cliente.dni" disabled/></b-col>
+
        <b-col cols="2" class="mr-auto p-3"><label for="">Nombre</label></b-col>
     <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="cliente.nombre" disabled/></b-col> 
+        <b-col cols="2" class="mr-auto p-3"><label for="">DNI</label></b-col>
+    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="cliente.dni" disabled/></b-col>
        <b-col cols="2" class="mr-auto p-3"><label for="">Apellido</label></b-col>
+
     <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="cliente.apellido" disabled/></b-col> 
-         <b-col cols="2" class="mr-auto p-3">Telefono<label for="Telefono"></label></b-col>
-    <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="cliente.telefono" disabled/></b-col> 
+
+        
+        <b-col cols="4" class="mr-auto p-3"> </b-col> 
+        <b-col cols="1" class="mr-auto p-3"> <b-button @click="limpiar_cliente('3')">X</b-button> </b-col> 
 
 
 
@@ -46,13 +50,13 @@
     <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante1.dni" disabled/></b-col>
        <b-col cols="2" class="mr-auto p-3"><label for="">Apellido</label></b-col>
     <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="garante1.apellido" disabled/></b-col> 
-        <b-col cols="2" class="mr-auto p-3"> <b-button @click="eliminar_garante('1')">X</b-button> </b-col> 
+        <b-col cols="2" class="mr-auto p-3"> <b-button @click="limpiar_cliente('1')">X</b-button> </b-col> 
 
               <b-col cols="1" class="mr-auto p-3"><label for="">DNI</label></b-col>
     <b-col cols="3" class="mr-auto p-3"><b-form-input v-model="garante2.dni" disabled/></b-col>
        <b-col cols="2" class="mr-auto p-3"><label for="">Apellido</label></b-col>
     <b-col cols="4" class="mr-auto p-3"><b-form-input v-model="garante2.apellido" disabled/></b-col> 
-            <b-col cols="2" class="mr-auto p-3"> <b-button @click="eliminar_garante('2')" >X</b-button> </b-col> 
+            <b-col cols="2" class="mr-auto p-3"> <b-button @click="limpiar_cliente('2')" >X</b-button> </b-col> 
         </b-row>
             </b-col>
 
@@ -201,7 +205,7 @@ export default {
             total:0,
             subtotal:0,
             metodo:null,
-            cliente:[],
+            cliente:'',
             aux_dni_cliente:'',
             aux_cantidad:0,
             cantidad:0,
@@ -250,13 +254,8 @@ export default {
 
 
     },
-    watch :{
-        total : function(val){
-            console.log('detecta cambios',val)
-        }
 
-    },
-      computed: {
+    computed: {
                 fileSizeValidation() {
                     var estado = true
                     if (this.cantidad != 0 && this.producto.precio != 0) {
@@ -323,12 +322,15 @@ export default {
 
     },
     methods:{
-        eliminar_garante(garante){
-            if (garante==1) {
+        limpiar_cliente(cliente){
+            if (cliente==1) {
                 this.garante1=''
             }
-            else if(garante==2){
+            else if(cliente==2){
                 this.garante2=''
+            }
+            else if(cliente==3){
+                this.cliente=''
             }
 
         },
@@ -394,8 +396,19 @@ export default {
           
       },
       clienteseleccionado: function(cliente){
+          console.log(this.cliente)
+        if (this.cliente == '') {
+            this.cliente=cliente
+            
+        }
+        else if(this.garante1==''){
+            this.garante1=cliente
+        }
+        else if(this.garante2==''){
+            this.garante2=cliente
+        }
           
-         this.cliente=cliente
+         
       },
         productoseleccionado: function(producto){
          this.producto=producto
@@ -510,9 +523,6 @@ export default {
     vender(){
         var datos={}
         var fv=this.verificar_fecha()
-
-        console.log(this.totaldesc)
-        console.log(this.anticipo)
 
         if (fv == true) {
             datos={'solicitante':this.cliente.dni,

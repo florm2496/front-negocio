@@ -85,7 +85,7 @@
           ></b-form-input>
         </b-form-group>
         <b-form-group
-          label="Tipo"
+          label="Rubro"
           label-for="tipo_id"
           invalid-feedback="Debe ingresar el rubro"
           :state="tipoState"
@@ -121,8 +121,6 @@ import APIProductos from '../../apis/productos'
         elect:'hola',
         codigo_producto:0,
     
-    
-        tipos: ['ELECTRODOMESTICOS','INDUMENTARIA'],
         nombreState:null,
         precioState:null,
         tipoState:null,

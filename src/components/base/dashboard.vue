@@ -67,6 +67,9 @@ import APIConsultas from '../../apis/consultas'
 
 export default {
     name: 'Dashboard',
+    metaInfo: {
+      title: 'Hogareña'
+    },
     data(){
       return{
           datos:''
